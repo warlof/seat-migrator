@@ -1,0 +1,27 @@
+{
+  "name": "eveseat/upgrader",
+  "description": "This package is handling major version upgrade from SeAT project.",
+  "type": "seat-plugins",
+  "minimum-stability": "stable",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Warlof Tutsimo",
+      "email": "loic.leuilliot@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Seat\\Upgrader\\": "src/"
+    }
+  },
+  "require": {
+    "eveseat/seat":"2.0.0",
+    "eveseat/eveapi":"2.0.14",
+    "eveseat/notifications":"2.0.11",
+    "eveseat/web":"2.0.19",
+    "eveseat/services":"2.0.13",
+    "eveseat/api":"2.0.10",
+    "spatie/db-dumper":"2.9.0"
+  }
+}
