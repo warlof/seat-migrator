@@ -18,12 +18,20 @@ class UpgraderServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->addCommands();
+        $this->addPublications();
     }
 
     private function addCommands()
     {
         $this->commands([
             SchemaUpgrade::class,
+        ]);
+    }
+
+    private function addPublications()
+    {
+        $this->publishes([
+            __DIR__ . '/database/migrations/' => database_path('migrations'),
         ]);
     }
 

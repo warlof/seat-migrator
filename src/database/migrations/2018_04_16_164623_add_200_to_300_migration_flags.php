@@ -35,6 +35,8 @@ class Add200To300MigrationFlags extends Migration
 
             Schema::table($table, function(Blueprint $blueprint) {
 
+                echo sprintf("Preparing %s for upgrade...\r\n", $blueprint->getTable());
+
                 $blueprint->boolean('upgraded')->default(false);
 
                 // add an index tied to the new column in order to improve upgrading scale on the flow
