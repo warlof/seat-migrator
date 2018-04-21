@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\Notifications;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterNotification extends Notifications implements ICoreUpgrade
 {
@@ -21,7 +22,7 @@ class CharacterNotification extends Notifications implements ICoreUpgrade
                "sender_type, `timestamp`, is_read, text, created_at, updated_at) " .
                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        DB::connection($target)->inser($sql, [
+        DB::connection($target)->insert($sql, [
             $this->characterID,
             $this->notificationID,
             $this->typeID, // TODO : convert
@@ -50,4 +51,24 @@ class CharacterNotification extends Notifications implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_notifications' => [
+                'characterID'    => 'character_id',
+                'notificationID' => 'notification_id',
+                'typeID'         => 'type',
+                'senderID'       => 'sender_id',
+                'sentDate'       => 'timestamp',
+                'read'           => 'is_read',
+                'created_at'     => 'created_at',
+                'updated_at'     => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\WalletTransaction;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterWalletTransaction extends WalletTransaction implements ICoreUpgrade
 {
@@ -49,4 +50,27 @@ class CharacterWalletTransaction extends WalletTransaction implements ICoreUpgra
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_wallet_transactions' => [
+                'characterID'          => 'character_id',
+                'transactionID'        => 'transaction_id',
+                'transactionDateTime'  => 'date',
+                'typeID'               => 'type_id',
+                'stationID'            => 'location_id',
+                'price'                => 'unit_price',
+                'quantity'             => 'quantity',
+                'clientID'             => 'client_id',
+                'journalTransactionID' => 'journal_ref_id',
+                'created_at'           => 'created_at',
+                'updated_at'           => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

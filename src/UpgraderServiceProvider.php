@@ -21,7 +21,7 @@ class UpgraderServiceProvider extends ServiceProvider
         $this->addCommands();
         $this->addPublications();
 
-        $this->debug();
+        //$this->debug();
     }
 
     private function addCommands()

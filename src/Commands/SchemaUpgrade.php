@@ -91,51 +91,93 @@ class SchemaUpgrade extends Command
 
         //
 
-        $this->comment(sprintf('Proceed upgrade from character_account_balances to character_wallet_balances' .
-                               '(%d)', CharacterAccountBalance::where('upgraded', false)->count()));
+        $count = CharacterAccountBalance::where('upgraded', false)->count();
+        $this->comment(sprintf('Proceed upgrade from character_account_balances to character_wallet_balances (%d)',
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = CharacterAccountBalance::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = CharacterAccountBalance::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         //
 
+        $count = CharacterAffiliation::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_affiliations to character_affiliations (%d)',
-            CharacterAffiliation::where('upgraded', false)->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = CharacterAffiliation::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = CharacterAffiliation::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         //
 
+        $count = CharacterBookmark::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_bookmarks to character_bookmarks (%s)',
-            CharacterBookmark::where('upgraded', false)->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = CharacterBookmark::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = CharacterBookmark::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         //
 
+        $count = CharacterTitle::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_character_sheet_corporation_titles to character_titles (%s)',
-            CharacterTitle::where('upgraded', false)->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = CharacterTitle::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = CharacterTitle::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         //
 
+        $count = CharacterImplant::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_character_sheet_implants to character_implants (%s)',
-            CharacterImplant::where('upgraded', false)->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = CharacterImplant::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = CharacterImplant::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         //
 
+        $count = CharacterJumpClone::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_character_sheet_jump_clones to character_jump_clones (%s)',
-            CharacterJumpClone::where('upgraded', false)->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = CharacterJumpClone::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = CharacterJumpClone::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         $records = CharacterSheetJumpCloneImplants::select(
                     DB::raw('characterID as character_id'),
@@ -166,27 +208,48 @@ class SchemaUpgrade extends Command
 
         //
 
+        $count = CharacterSkill::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_character_sheet_skills to character_skills (%s)',
-            CharacterSkill::where('upgraded', false)->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = CharacterSkill::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = CharacterSkill::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         //
 
+        $count = CharacterSheet::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_character_sheets to character_infos, character_attributes, character_clones, character_info_skills, character_fatigues (%s)',
-            CharacterSheet::where('upgraded', false)->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = CharacterSheet::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = CharacterSheet::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         //
 
+        $count = ChatChannelInfo::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_chat_channel_infos to character_chat_channel_infos (%s)',
-            ChatChannelInfo::where('upgraded', false)->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = ChatChannelInfo::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = ChatChannelInfo::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         // TODO
 /*
@@ -235,37 +298,48 @@ class SchemaUpgrade extends Command
 
         });
 */
+        $count = ContactListCorporate::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_contact_list_corporates to corporation_contacts (%s)',
-            ContactListCorporate::where('upgraded', false)->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        while (($records = ContactListCorporate::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+        while (($records = ContactListCorporate::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
             $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterContactListLabel::where('upgraded', false)->get();
-
+        $count = CharacterContactListLabel::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_contact_list_labels to character_contact_labels (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterContactListLabel::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterContactList::where('upgraded', false)->get();
-
+        $count = CharacterContactList::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_contact_lists to character_contacts (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterContactList::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         // TODO
 /*
@@ -289,88 +363,100 @@ class SchemaUpgrade extends Command
 */
         //
 
-        $records = CharacterContract::where('upgraded', false)->get();
-
+        $count = CharacterContract::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_contracts to contract_details (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterContract::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterContractItem::where('upgraded', false)->get();
-
+        $count = CharacterContractItem::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_contract_items to contract_items (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterContractItem::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterIndustryJob::where('upgraded', false)->get();
-
+        $count = CharacterIndustryJob::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_industry_jobs to character_industry_jobs (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterIndustryJob::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = MailHeader::where('upgraded', false)->get();
-
+        $count = MailHeader::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_mail_messages to mail_headers, mail_recipients (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = MailHeader::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = MailBody::where('upgraded', false)->get();
-
+        $count = MailBody::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_mail_message_bodies to mail_bodies (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = MailBody::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = MailingList::where('upgraded', false)->get();
-
+        $count = MailingList::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_mailing_lists, character_mailing_list_infos to mail_mailing_lists (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = MailingList::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = MarketOrder::where('upgraded', false)->get();
-
+        $count = MarketOrder::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_market_orders to character_orders (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
         $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
 
@@ -382,122 +468,144 @@ class SchemaUpgrade extends Command
 
         });
 
+        $bar->finish();
+        $this->line('');
+
         //
 
-        $records = CharacterNotification::where('upgraded', false)->get();
-
+        $count = CharacterNotification::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_notifications to character_notifications (%s)',
             $records->count()));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterNotification::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
+        $bar->finish();
+        $this->line('');
 
-        });
-
-        $records = CharacterNotificationText::where('upgraded', false)->get();
-
+        $count = CharacterNotificationText::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_notification_texts to character_notifications (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record){
+        while (($records = CharacterNotificationText::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterPlanet::where('upgraded', false)->get();
-
+        $count = CharacterPlanet::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_planetary_colonies to character_planets (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterPlanet::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterPlanetLink::where('upgraded', false)->get();
-
+        $count = CharacterPlanetLink::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_planetary_links to character_planet_links (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterPlanetLink::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterPlanetPin::where('upgraded', false)->get();
-
+        $count = CharacterPlanetPin::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_planetary_pins to character_planet_pins (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterPlanetPin::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterPlanetRoute::where('upgraded', false)->get();
-
+        $count = CharacterPlanetRoute::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_planetary_routes to character_planet_routes, character_planet_route_waypoints (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterPlanetRoute::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
-
-        //
-
-        $records = CharacterResearch::where('upgraded', false)->get();
-
-        $this->comment(sprintf('Proceed upgrade from character_researches to character_agent_researches (%s)', $records->count()));
-
-        $records->each(function($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterSkillQueue::where('upgraded', false)->get();
+        $count = CharacterResearch::where('upgraded', false)->count();
+        $this->comment(sprintf('Proceed upgrade from character_researches to character_agent_researches (%s)',
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
+        while (($records = CharacterResearch::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
+
+        $bar->finish();
+        $this->line('');
+
+        //
+
+        $count = CharacterSkillQueue::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_skill_queues to character_skill_queues (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterSkillQueue::where('upgraded', false)->take(self::TARGETED_BASE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         //
 
-        $records = CharacterStanding::where('upgraded', false)->get();
-
+        $count = CharacterStanding::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_standings to character_standings (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterStanding::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
+        $bar->finish();
+        $this->line('');
 
-        });
-
-        //
-
+        // TODO
+/*
         $records = UpcomingCalendarEvent::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_upcoming_calendar_events to character_calendar_events (%s)',
@@ -514,32 +622,39 @@ class SchemaUpgrade extends Command
         });
 
         UpcomingCalendarEvent::where('upgraded', false)->update(['upgraded' => true]);
-
+*/
         //
 
-        $records = CharacterWalletJournal::where('upgraded', false)->get();
-
+        // TODO : fix type conversion on date field
+        /*
+        $count = CharacterWalletJournal::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_wallet_journals to character_wallet_journals (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterWalletJournal::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
-
+        $bar->finish();
+        $this->line('');
+*/
         //
 
-        $records = CharacterWalletTransaction::where('upgraded', false)->get();
-
+        // TODO : fix type conversion on date field
+        $count = CharacterWalletTransaction::where('upgraded', false)->count();
         $this->comment(sprintf('Proceed upgrade from character_wallet_transactions to character_wallet_transactions (%s)',
-            $records->count()));
+            $count));
+        $bar = $this->output->createProgressBar($count);
 
-        $records->each(function($record) {
+        while (($records = CharacterWalletTransaction::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0) {
+            $records->upgrade(self::TARGETED_BASE);
+            $bar->advance($records->count());
+        }
 
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        $bar->finish();
+        $this->line('');
 
         // ** CORPORATION START HERE ** //
 
@@ -570,8 +685,7 @@ class SchemaUpgrade extends Command
             '(default is 3306)', 3306);
         $this->db['username'] = $this->ask('What is the database username which have to be use for the migration ' .
             '(the user must be usable from the current server ? (default is seat)', 'seat');
-        $this->db['password'] = $this->ask('What is the password attached to the provided username ?' .
-            '(warning - it will be showed in the prompt', 'seatseat');
+        $this->db['password'] = $this->output->askHidden('What is the password attached to the provided username ?');
         $this->db['database'] = $this->ask('What is the name of the database where SeAT 3.0.0 has been installed ? ' .
             '(default is seat)', 'seat-dev');
 

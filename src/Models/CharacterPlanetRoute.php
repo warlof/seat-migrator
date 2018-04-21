@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\PlanetaryRoute;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterPlanetRoute extends PlanetaryRoute implements ICoreUpgrade
 {
@@ -50,4 +51,25 @@ class CharacterPlanetRoute extends PlanetaryRoute implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        // TODO : implement closure for magic mapper
+        return [
+            'character_planet_routes' => [
+                'ownerID'          => 'character_id',
+                'planetID'         => 'planet_id',
+                'sourcePinID'      => 'source_pin_id',
+                'destinationPinID' => 'destination_pin_id',
+                'contentTypeID'    => 'content_type_id',
+                'quantity'         => 'quantity',
+                'created_at'       => 'created_at',
+                'updated_at'       => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\MailMessageBody;
+use Seat\Upgrader\Services\MappingCollection;
 
 class MailBody extends MailMessageBody implements ICoreUpgrade
 {
@@ -31,4 +32,20 @@ class MailBody extends MailMessageBody implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'mail_bodies' => [
+                'messageID'  => 'mail_id',
+                'body'       => 'body',
+                'created_at' => 'created_at',
+                'updated_at' => 'updated_at'
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

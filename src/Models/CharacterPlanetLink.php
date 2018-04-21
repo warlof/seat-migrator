@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\PlanetaryLink;
+use Seat\Upgrader\Services\MappingCollection;
 use Seat\Upgrader\Traits\HasCompositePrimaryKey;
 
 class CharacterPlanetLink extends PlanetaryLink implements ICoreUpgrade
@@ -40,4 +41,23 @@ class CharacterPlanetLink extends PlanetaryLink implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_planet_links' => [
+                'ownerID'          => 'character_id',
+                'planetID'         => 'planet_id',
+                'sourcePinID'      => 'source_pin_id',
+                'destinationPinID' => 'destination_pin_id',
+                'linkLevel'        => 'link_level',
+                'created_at'       => 'created_at',
+                'updated_at'       => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

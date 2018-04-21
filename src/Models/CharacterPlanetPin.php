@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\PlanetaryPin;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterPlanetPin extends PlanetaryPin implements ICoreUpgrade
 {
@@ -40,4 +41,28 @@ class CharacterPlanetPin extends PlanetaryPin implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_planet_pins' => [
+                'ownerID'        => 'character_id',
+                'planetID'       => 'planet_id',
+                'pinID'          => 'pin_id',
+                'typeID'         => 'type_id',
+                'schematicID'    => 'schematic_id',
+                'latitude'       => 'latitude',
+                'longitude'      => 'longitude',
+                'installTime'    => 'install_time',
+                'expiryTime'     => 'expiry_time',
+                'lastLaunchTime' => 'last_cycle_start',
+                'created_at'     => 'created_at',
+                'updated_at'     => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

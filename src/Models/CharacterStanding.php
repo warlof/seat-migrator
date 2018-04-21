@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\Standing;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterStanding extends Standing implements ICoreUpgrade
 {
@@ -34,4 +35,23 @@ class CharacterStanding extends Standing implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_standings' => [
+                'id'          => 'id',
+                'characterID' => 'character_id',
+                'fromID'      => 'from_id',
+                'type'        => 'from_type',
+                'standing'    => 'standing',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

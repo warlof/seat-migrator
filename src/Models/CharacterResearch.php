@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\Research;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterResearch extends Research implements ICoreUpgrade
 {
@@ -36,4 +37,24 @@ class CharacterResearch extends Research implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_agent_researches' => [
+                'characterID'       => 'character_id',
+                'agentID'           => 'agent_id',
+                'skillTypeID'       => 'skill_type_id',
+                'researchStartDate' => 'started_at',
+                'pointsPerDay'      => 'points_per_day',
+                'remainderPoints'   => 'remainder_points',
+                'created_at'        => 'created_at',
+                'updated_at'        => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

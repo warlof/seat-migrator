@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\MailingListInfo;
+use Seat\Upgrader\Services\MappingCollection;
 use Seat\Upgrader\Traits\HasCompositePrimaryKey;
 
 class MailingList extends \Seat\Eveapi\Models\Character\MailingList implements ICoreUpgrade
@@ -42,4 +43,21 @@ class MailingList extends \Seat\Eveapi\Models\Character\MailingList implements I
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'mail_mailing_lists' => [
+                'characterID' => 'character_id',
+                'listID'      => 'mailing_list_id',
+                'displayName' => 'name',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

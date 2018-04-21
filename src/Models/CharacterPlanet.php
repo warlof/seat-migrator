@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\PlanetaryColony;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterPlanet extends PlanetaryColony implements ICoreUpgrade
 {
@@ -49,4 +50,24 @@ class CharacterPlanet extends PlanetaryColony implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_planets' => [
+                'ownerID'       => 'character_id',
+                'solarSystemID' => 'solar_system_id',
+                'planetID'      => 'planet_id',
+                'upgradeLevel'  => 'upgrade_level',
+                'numberOfPins'  => 'num_pins',
+                'lastUpdate'    => 'last_update',
+                'created_at'    => 'created_at',
+                'updated_at'    => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

@@ -11,6 +11,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\MailMessage;
+use Seat\Upgrader\Services\MappingCollection;
 
 class MailHeader extends MailMessage implements ICoreUpgrade
 {
@@ -80,4 +81,26 @@ class MailHeader extends MailMessage implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'mail_headers' => [
+                'characterID' => 'character_id',
+                'title'       => 'subject',
+                'senderID'    => 'from',
+                'sentDate'    => 'timestamp',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
+            // TODO : implement closure in magic mapper
+            //'mail_recipients' => [
+            //
+            //],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }
