@@ -10,6 +10,7 @@ namespace Seat\Upgrader\Models;
 
 
 use Illuminate\Support\Facades\DB;
+use Seat\Upgrader\Services\MappingCollection;
 use Seat\Upgrader\Traits\HasCompositePrimaryKey;
 
 class ContactListCorporate extends \Seat\Eveapi\Models\Character\ContactListCorporate implements ICoreUpgrade
@@ -38,4 +39,23 @@ class ContactListCorporate extends \Seat\Eveapi\Models\Character\ContactListCorp
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'corporation_contacts' => [
+                'corporationID' => 'corporation_id',
+                'contactID'     => 'contact_id',
+                'standing'      => 'standing',
+                'contactTypeID' => 'contact_type',
+                'labelMask'     => 'label_id',
+                'created_at'    => 'created_at',
+                'updated_at'    => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

@@ -9,57 +9,58 @@
 namespace Seat\Upgrader\Services;
 
 
-//use Illuminate\Support\Collection;
 use \Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class MappingCollection extends Collection
 {
 
-    private $mapping = [];
+    //private $mapping = [];
 
-    public function __construct($mapping, $items = [])
+    public function __construct($items = [])
     {
-        $this->mapping = $mapping;
-
         parent::__construct($items);
     }
 
-    public function chunk($size)
+    public function upgrade(string $target)
     {
-        if ($size <= 0) {
-            return new static($this->mapping, $this->items);
+        if ($this->count() < 1)
+            return;
+
+        $artifact = $this->first();
+
+        $mapping = call_user_func([$artifact, 'getUpgradeMapping']);
+
+        DB::connection($target)->setQueryGrammar(new CustomMySqlGrammar());
+
+        foreach ($mapping as $table => $columns) {
+            DB::connection($target)->table($table)->insert($this->map(function($item, $key) use ($columns) {
+                $new = [];
+
+                foreach ($columns as $src_column => $dst_column)
+                    $new[$dst_column] = $item->{$src_column};
+
+                return $new;
+            })->toArray());
         }
 
-        $chunks = [];
+        if (is_array($artifact->getKeyName())) {
+            DB::table($artifact->getTable())
+                ->whereRaw('MD5(CONCAT(' . implode(', ', $artifact->getKeyName()) . ')) IN (?)',
+                    $this->map(function($item, $key) use ($artifact) {
+                        $hash = [];
 
-        foreach (array_chunk($this->items, $size, true) as $chunk) {
-            $chunks[] = new static($this->mapping, $chunk);
+                        foreach ($artifact->getKeyName() as $column)
+                            $hash[] = $item->{$column};
+
+                        return md5(implode('', $hash));
+                    })->implode('", "'))
+                ->update(['upgraded' => true]);
+        } else {
+            DB::table($artifact->getTable())
+                ->whereIn($artifact->getKeyName(), $this->pluck($artifact->getKeyName()))
+                ->update(['upgraded' => true]);
         }
-
-        return new static($this->mapping, $chunks);
-    }
-
-    public function toArray()
-    {
-
-        $array = [];
-
-        foreach ($this as $model) {
-
-            $element = [];
-
-            foreach ($this->mapping as $from => $to) {
-
-                $element[$to] = $model->{$from};
-
-            }
-
-            $array[] = $element;
-
-        }
-
-        return $array;
-
     }
 
 }

@@ -10,6 +10,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterSheetJumpClone;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterJumpClone extends CharacterSheetJumpClone implements ICoreUpgrade
 {
@@ -32,4 +33,22 @@ class CharacterJumpClone extends CharacterSheetJumpClone implements ICoreUpgrade
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_jump_clones' => [
+                'characterID' => 'character_id',
+                'jumpCloneID' => 'jump_clone_id',
+                'cloneName'   => 'name',
+                'locationID'  => 'location_id',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

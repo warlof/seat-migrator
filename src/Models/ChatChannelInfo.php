@@ -9,6 +9,7 @@
 namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
+use Seat\Upgrader\Services\MappingCollection;
 
 class ChatChannelInfo extends \Seat\Eveapi\Models\Character\ChatChannelInfo implements ICoreUpgrade
 {
@@ -32,4 +33,26 @@ class ChatChannelInfo extends \Seat\Eveapi\Models\Character\ChatChannelInfo impl
         $this->upgraded = true;
         $this->save();
     }
+
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_chat_channel_infos' => [
+                'channelID'     => 'channel_id',
+                'ownerID'       => 'owner_id',
+                'displayName'   => 'name',
+                'comparisonKey' => 'comparison_key',
+                'hasPassword'   => 'has_password',
+                'motd'          => 'motd',
+                'created_at'    => 'created_at',
+                'updated_at'    => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
+
 }

@@ -10,6 +10,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterSheetImplants;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterImplant extends CharacterSheetImplants implements ICoreUpgrade
 {
@@ -28,6 +29,23 @@ class CharacterImplant extends CharacterSheetImplants implements ICoreUpgrade
 
         $this->upgraded = true;
         $this->save();
+    }
+
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_implants' => [
+                'characterID' => 'character_id',
+                'typeID'      => 'type_id',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
     }
 
 }

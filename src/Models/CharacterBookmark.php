@@ -10,15 +10,42 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\Bookmark;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterBookmark extends Bookmark implements ICoreUpgrade
 {
 
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
+
+    public function getUpgradeMapping() : array
+    {
+        return [
+            'character_bookmarks' => [
+                'characterID' => 'character_id',
+                'bookmarkID'  => 'bookmark_id',
+                'folderID'    => 'folder_id',
+                'created'     => 'created',
+                'creatorID'   => 'creator_id',
+                'itemID'      => 'item_id',
+                'memo'        => 'label',
+                'locationID'  => 'location_id',
+                'note'        => 'notes',
+                'typeID'      => 'type_id',
+                'x'           => 'x',
+                'y'           => 'y',
+                'z'           => 'z',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
+        ];
+    }
+
     public function upgrade(string $target)
     {
-        $sql = "INSERT IGNORE INTO character_bookmarks (character_id, bookmark_id, folder_id, created, creator_id, " .
-               "item_id, label, location_id, notes, type_id, x, y, z, updated_at, created_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = $this->getUpgradeQuery();
 
         DB::connection($target)->insert($sql, [
             $this->characterID,

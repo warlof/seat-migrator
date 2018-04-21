@@ -13,19 +13,8 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterSheetJumpCloneImplants;
-use Seat\Eveapi\Models\Character\MailingListInfo;
-use Seat\Eveapi\Models\Character\MailMessage;
 use Seat\Eveapi\Models\Character\MarketOrder;
-use Seat\Eveapi\Models\Character\PlanetaryColony;
-use Seat\Eveapi\Models\Character\PlanetaryLink;
-use Seat\Eveapi\Models\Character\PlanetaryPin;
-use Seat\Eveapi\Models\Character\PlanetaryRoute;
-use Seat\Eveapi\Models\Character\Research;
-use Seat\Eveapi\Models\Character\SkillQueue;
-use Seat\Eveapi\Models\Character\Standing;
 use Seat\Eveapi\Models\Character\UpcomingCalendarEvent;
-use Seat\Eveapi\Models\Character\WalletJournal;
-use Seat\Eveapi\Models\Character\WalletTransaction;
 // Upgrader
 use Seat\Upgrader\Models\CharacterAccountBalance;
 use Seat\Upgrader\Models\CharacterAffiliation;
@@ -39,13 +28,23 @@ use Seat\Upgrader\Models\CharacterIndustryJob;
 use Seat\Upgrader\Models\CharacterJumpClone;
 use Seat\Upgrader\Models\CharacterNotification;
 use Seat\Upgrader\Models\CharacterNotificationText;
+use Seat\Upgrader\Models\CharacterPlanet;
+use Seat\Upgrader\Models\CharacterPlanetLink;
+use Seat\Upgrader\Models\CharacterPlanetPin;
+use Seat\Upgrader\Models\CharacterPlanetRoute;
+use Seat\Upgrader\Models\CharacterResearch;
 use Seat\Upgrader\Models\CharacterSheet;
 use Seat\Upgrader\Models\CharacterSkill;
+use Seat\Upgrader\Models\CharacterSkillQueue;
+use Seat\Upgrader\Models\CharacterStanding;
 use Seat\Upgrader\Models\CharacterTitle;
+use Seat\Upgrader\Models\CharacterWalletJournal;
+use Seat\Upgrader\Models\CharacterWalletTransaction;
 use Seat\Upgrader\Models\ChatChannelInfo;
 use Seat\Upgrader\Models\ContactListCorporate;
 use Seat\Upgrader\Models\MailBody;
 use Seat\Upgrader\Models\MailHeader;
+use Seat\Upgrader\Models\MailingList;
 use Spatie\DbDumper\Databases\MySql;
 
 class SchemaUpgrade extends Command
@@ -92,79 +91,51 @@ class SchemaUpgrade extends Command
 
         //
 
-        $records = CharacterAccountBalance::where('upgraded', false)->get();
-
         $this->comment(sprintf('Proceed upgrade from character_account_balances to character_wallet_balances' .
-                               '(%d)', $records->count()));
+                               '(%d)', CharacterAccountBalance::where('upgraded', false)->count()));
 
-        $records->each(function($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        while (($records = CharacterAccountBalance::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         //
 
-        $records = CharacterAffiliation::where('upgraded', false)->get();
         $this->comment(sprintf('Proceed upgrade from character_affiliations to character_affiliations (%d)',
-            $records->count()));
+            CharacterAffiliation::where('upgraded', false)->count()));
 
-        $records->each(function($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        while (($records = CharacterAffiliation::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         //
 
-        $records = CharacterBookmark::where('upgraded', false)->get();
         $this->comment(sprintf('Proceed upgrade from character_bookmarks to character_bookmarks (%s)',
-            $records->count()));
+            CharacterBookmark::where('upgraded', false)->count()));
 
-        $records->each(function($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        while (($records = CharacterBookmark::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         //
-
-        $records = CharacterTitle::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_character_sheet_corporation_titles to character_titles (%s)',
-            $records->count()));
+            CharacterTitle::where('upgraded', false)->count()));
 
-        $records->each(function($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        while (($records = CharacterTitle::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         //
-
-        $records = CharacterImplant::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_character_sheet_implants to character_implants (%s)',
-            $records->count()));
+            CharacterImplant::where('upgraded', false)->count()));
 
-        $records->each(function($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        while (($records = CharacterImplant::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         //
 
-        $records = CharacterJumpClone::where('upgraded', false)->get();
-
         $this->comment(sprintf('Proceed upgrade from character_character_sheet_jump_clones to character_jump_clones (%s)',
-            $records->count()));
+            CharacterJumpClone::where('upgraded', false)->count()));
 
-        $records->each(function($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        while (($records = CharacterJumpClone::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         $records = CharacterSheetJumpCloneImplants::select(
                     DB::raw('characterID as character_id'),
@@ -195,42 +166,27 @@ class SchemaUpgrade extends Command
 
         //
 
-        $records = CharacterSkill::where('upgraded', false)->get();
-
         $this->comment(sprintf('Proceed upgrade from character_character_sheet_skills to character_skills (%s)',
-            $records->count()));
+            CharacterSkill::where('upgraded', false)->count()));
 
-        $records->each(function ($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        while (($records = CharacterSkill::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         //
-
-        $records = CharacterSheet::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_character_sheets to character_infos, character_attributes, character_clones, character_info_skills, character_fatigues (%s)',
-            $records->count()));
+            CharacterSheet::where('upgraded', false)->count()));
 
-        $records->each(function($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        while (($records = CharacterSheet::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         //
 
-        $records = ChatChannelInfo::where('upgraded', false)->get();
-
         $this->comment(sprintf('Proceed upgrade from character_chat_channel_infos to character_chat_channel_infos (%s)',
-            $records->count()));
+            ChatChannelInfo::where('upgraded', false)->count()));
 
-        $records->each(function($record) {
-
-            $record->upgrade(self::TARGETED_BASE);
-
-        });
+        while (($records = ChatChannelInfo::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         // TODO
 /*
@@ -267,6 +223,7 @@ class SchemaUpgrade extends Command
 
         //
 */
+/*
         $records = ContactListCorporate::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_contact_list_corporates to corporation_contacts (%s)',
@@ -277,6 +234,12 @@ class SchemaUpgrade extends Command
             $record->upgrade(SELF::TARGETED_BASE);
 
         });
+*/
+        $this->comment(sprintf('Proceed upgrade from character_contact_list_corporates to corporation_contacts (%s)',
+            ContactListCorporate::where('upgraded', false)->count()));
+
+        while (($records = ContactListCorporate::where('upgraded', false)->take(self::CHUNK_SIZE)->get())->count() > 0)
+            $records->upgrade(self::TARGETED_BASE);
 
         //
 
@@ -391,18 +354,14 @@ class SchemaUpgrade extends Command
 
         //
 
-        $records = MailingListInfo::where('upgraded', false)->get();
+        $records = MailingList::where('upgraded', false)->get();
 
-        $this->comment(sprintf('Proceed upgrade from character_mailing_list_infos to mail_mailing_lists (%s)',
+        $this->comment(sprintf('Proceed upgrade from character_mailing_lists, character_mailing_list_infos to mail_mailing_lists (%s)',
             $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('mail_mailing_lists')->insert($chunk->toArray());
-
-            DB::table('character_mailing_list_infos')
-                ->whereIn('listID', $chunk->pluck('listID'))
-                ->update('upgraded', true);
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 
@@ -449,118 +408,91 @@ class SchemaUpgrade extends Command
 
         //
 
-        $records = PlanetaryColony::where('upgraded', false)->get();
+        $records = CharacterPlanet::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_planetary_colonies to character_planets (%s)',
             $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('character_planets')->insert($chunk->pluck('solarSystemID', 'planetID',
-                'planetTypeID', 'ownerID', 'upgradeLevel', 'numberOfPins', 'created_at', 'updated_at'));
-
-            DB::table('character_planetary_colonies')->whereIn('id', $chunk->pluck('id'))->update('upgraded', true);
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 
         //
 
-        $records = PlanetaryLink::where('upgraded', false)->get();
+        $records = CharacterPlanetLink::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_planetary_links to character_planet_links (%s)',
             $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('character_planet_links')->insert($chunk->toArray());
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 
-        PlanetaryLink::where('upgraded', false)->update(['upgraded' => true]);
-
         //
 
-        $records = PlanetaryPin::where('upgraded', false)->get();
+        $records = CharacterPlanetPin::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_planetary_pins to character_planet_pins (%s)',
             $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('character_planet_pins')->insert($chunk->pluck('pinID', 'ownerID',
-                'planetID', 'typeID', 'schematicID', 'lastLaunchTime', 'installTime', 'expiryTime', 'longitude',
-                'latitude', 'created_at', 'updated_at'));
-
-            DB::table('character_planetary_pins')->whereIn('id', $chunk->pluck('id'))->update('upgraded', true);
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 
         //
 
-        $records = PlanetaryRoute::where('upgraded', false)->get();
+        $records = CharacterPlanetRoute::where('upgraded', false)->get();
 
-        $this->comment(sprintf('Proceed upgrade from character_planetary_routes to character_planet_routes (%s)',
+        $this->comment(sprintf('Proceed upgrade from character_planetary_routes to character_planet_routes, character_planet_route_waypoints (%s)',
             $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('character_planet_routes')->insert($chunk->pluck('routeID', 'ownerID',
-                'planetID', 'sourcePinID', 'destinationPinID', 'contentTypeID', 'quantity', 'created_at', 'updated_at'));
-
-            DB::connection('target')->table('character_planet_route_waypoints')->insert($chunk->pluck('routeID', 'ownerID', 'planetID', 'waypoint1', 'created_at', 'updated_at'));
-            DB::connection('target')->table('character_planet_route_waypoints')->insert($chunk->pluck('routeID', 'ownerID', 'planetID', 'waypoint2', 'created_at', 'updated_at'));
-            DB::connection('target')->table('character_planet_route_waypoints')->insert($chunk->pluck('routeID', 'ownerID', 'planetID', 'waypoint3', 'created_at', 'updated_at'));
-            DB::connection('target')->table('character_planet_route_waypoints')->insert($chunk->pluck('routeID', 'ownerID', 'planetID', 'waypoint4', 'created_at', 'updated_at'));
-            DB::connection('target')->table('character_planet_route_waypoints')->insert($chunk->pluck('routeID', 'ownerID', 'planetID', 'waypoint5', 'created_at', 'updated_at'));
-
-            DB::table('character_planetary_routes')->whereIn('id', $chunk->pluck('id'))->update('upgraded', true);
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 
         //
 
-        $records = Research::where('upgraded', false)->get();
+        $records = CharacterResearch::where('upgraded', false)->get();
 
-        $this->comment(sprintf('Proceed upgrade from character_researches (%s)', $records->count()));
+        $this->comment(sprintf('Proceed upgrade from character_researches to character_agent_researches (%s)', $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('character_agent_researches')->insert($chunk->pluck('characterID',
-                'agentID', 'skillTypeID', 'researchStartDate', 'pointsPerDay', 'remainderPoints', 'created_at',
-                'updated_at'));
-
-            DB::table('character_researches')->whereIn('id', $chunk->pluck('id'))->update('upgraded', true);
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 
         //
 
-        $records = SkillQueue::where('upgraded', false)->get();
+        $records = CharacterSkillQueue::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_skill_queues to character_skill_queues (%s)',
             $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('character_skill_queues')->insert($chunk);
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 
-        SkillQueue::where('upgraded', false)->update(['upgraded' => true]);
-
         //
 
-        $records = Standing::where('upgraded', false)->get();
+        $records = CharacterStanding::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_standings to character_standings (%s)',
             $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('character_standings')->insert($chunk->pluck('characterID', 'type',
-                'fromID', 'standing', 'created_at', 'updated_at'));
-
-            DB::table('character_standings')->whereIn('id', $chunk->pluck('id'))->update('upgraded', true);
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 
@@ -585,35 +517,27 @@ class SchemaUpgrade extends Command
 
         //
 
-        $records = WalletJournal::where('upgraded', false)->get();
+        $records = CharacterWalletJournal::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_wallet_journals to character_wallet_journals (%s)',
             $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('character_wallet_journals')->insert($chunk->pluck('characterID', 'refID',
-                'date', 'refTypeID', 'ownerID1', 'ownerID2', 'amount', 'balance', 'reason', 'taxReceiverID',
-                'taxAmount', 'owner1TypeID', 'owner2TypeID', 'created_at', 'updated_at'));
-
-            DB::table('character_wallet_journals')->whereIn('hash', $chunk->pluck('hash'))->update('upgraded', true);
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 
         //
 
-        $records = WalletTransaction::where('upgraded', false)->get();
+        $records = CharacterWalletTransaction::where('upgraded', false)->get();
 
         $this->comment(sprintf('Proceed upgrade from character_wallet_transactions to character_wallet_transactions (%s)',
             $records->count()));
 
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
+        $records->each(function($record) {
 
-            DB::connection('target')->table('character_wallet_transactions')->insert($chunk->pluck('characterID',
-                'transactionID', 'transactionDateTime', 'quantity', 'typeID', 'price', 'clientID', 'stationID',
-                'journalTransactionID', 'created_at', 'updated_at'));
-
-            DB::table('character_wallet_transactions')->whereIn('hash', $chunk->pluck('hash'))->update('upgraded', true);
+            $record->upgrade(self::TARGETED_BASE);
 
         });
 

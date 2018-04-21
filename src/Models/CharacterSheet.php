@@ -10,6 +10,7 @@ namespace Seat\Upgrader\Models;
 
 
 use Illuminate\Support\Facades\DB;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterSheet extends \Seat\Eveapi\Models\Character\CharacterSheet implements ICoreUpgrade
 {
@@ -94,4 +95,62 @@ class CharacterSheet extends \Seat\Eveapi\Models\Character\CharacterSheet implem
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_infos'       => [
+                'characterID'   => 'character_id',
+                'name'          => 'name',
+                'corporationID' => 'corporation_id',
+                'allianceID'    => 'alliance_id',
+                'DoB'           => 'birthday',
+                'gender'        => 'gender',
+                'race'          => 'race_id',
+                'bloodLineID'   => 'bloodline_id',
+                'ancestryID'    => 'ancenstry_id',
+                'factionID'     => 'faction_id',
+                'created_at'    => 'created_at',
+                'updated_at'    => 'updated_at',
+            ],
+            'character_attributes'  => [
+                'characterID'    => 'character_id',
+                'charisma'       => 'charisma',
+                'intelligence'   => 'intelligence',
+                'memory'         => 'memory',
+                'perception'     => 'perception',
+                'willpower'      => 'willpower',
+                'freeRespecs'    => 'bonus_remaps',
+                'lastRespecDate' => 'last_remap_date',
+                'created_at'     => 'created_at',
+                'updated_at'     => 'updated_at',
+            ],
+            'character_clones'      => [
+                'characterID'   => 'character_id',
+                'homeStationID' => 'home_location_id',
+                'remoteStationDate' => 'last_station_change_date',
+                'created_at'        => 'created_at',
+                'updated_at'        => 'updated_at',
+            ],
+            'character_info_skills' => [
+                'characterID'      => 'character_id',
+                'freeSkillPoints'  => 'unallocated_sp',
+                'cloneSkillPoints' => 'total_sp',
+                'created_at'       => 'created_at',
+                'updated_at'       => 'updated_at',
+            ],
+            'character_fatigues'    => [
+                'characterID'    => 'character_id',
+                'cloneJumpDate'  => 'last_jump_date',
+                'jumpFatigue'    => 'jump_fatigue_expire_date',
+                'jumpLastUpdate' => 'last_update_date',
+                'created_at'     => 'created_at',
+                'updated_at'     => 'updated_at',
+            ]
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }

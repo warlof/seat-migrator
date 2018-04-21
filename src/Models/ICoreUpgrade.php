@@ -14,4 +14,6 @@ interface ICoreUpgrade
 
     public function upgrade(string $target);
 
+    public function getUpgradeMapping() : array;
+
 }

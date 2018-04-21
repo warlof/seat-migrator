@@ -10,6 +10,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterSheetSkills;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterSkill extends CharacterSheetSkills implements ICoreUpgrade
 {
@@ -33,6 +34,25 @@ class CharacterSkill extends CharacterSheetSkills implements ICoreUpgrade
 
         $this->upgraded = true;
         $this->save();
+    }
+
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_skills' => [
+                'characterID' => 'character_id',
+                'typeID'      => 'skill_id',
+                'skillpoints' => 'skillpoints_in_skill',
+                'level'       => 'trained_skill_level',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
     }
 
 }

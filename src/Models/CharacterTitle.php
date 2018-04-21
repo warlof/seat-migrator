@@ -10,6 +10,7 @@ namespace Seat\Upgrader\Models;
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterSheetCorporationTitles;
+use Seat\Upgrader\Services\MappingCollection;
 
 class CharacterTitle extends CharacterSheetCorporationTitles implements ICoreUpgrade
 {
@@ -31,4 +32,21 @@ class CharacterTitle extends CharacterSheetCorporationTitles implements ICoreUpg
         $this->save();
     }
 
+    public function getUpgradeMapping(): array
+    {
+        return [
+            'character_titles' => [
+                'characterID' => 'character_id',
+                'titleID'     => 'title_id',
+                'titleName'   => 'name',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
+        ];
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new MappingCollection($models);
+    }
 }
