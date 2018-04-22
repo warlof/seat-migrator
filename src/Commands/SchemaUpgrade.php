@@ -103,43 +103,7 @@ class SchemaUpgrade extends Command
 
         CharacterSheetJumpCloneImplants::where('upgraded', false)->update(['upgraded' => true]);
 
-        //
-
         // TODO
-/*
-        $records = CharacterChatChannel::where('upgraded', false)->get();
-
-        $this->comment(sprintf('Proceed upgrade from character_chat_channel_members to character_chat_channel_members (%s)',
-            $records->count()));
-
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
-
-            DB::connection('target')->table('character_chat_channel_members')->insert($chunk->only('id', 'channel_id',
-                'accessorID', 'role', 'untilWhen', 'reason', 'created_at', 'updated_at')->all());
-
-            DB::table('character_chat_channel_members')
-                ->whereIn('id', $chunk->only('id')->all())
-                ->update(['upgraded' => true]);
-
-        });
-
-        //
-
-        $records = ChatChannel::where('upgraded', false)->get();
-
-        $this->comment(sprintf('Proceed upgrade from character_chat_channels to character_chat_channels (%s)',
-            $records->count()));
-
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
-
-            DB::connection('target')->table('character_chat_channels')->insert($chunk->toArray());
-
-        });
-
-        ChatChannel::where('upgraded', false)->update(['upgraded' => true]);
-
-        //
-*/
 /*
         $records = ContactListCorporate::where('upgraded', false)->get();
 
@@ -172,28 +136,6 @@ class SchemaUpgrade extends Command
 
         });
 */
-        // TODO
-/*
-        $records = UpcomingCalendarEvent::where('upgraded', false)->get();
-
-        $this->comment(sprintf('Proceed upgrade from character_upcoming_calendar_events to character_calendar_events (%s)',
-            $records->count()));
-
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
-
-            DB::connection('target')->table('character_calendar_events')->insert($chunk->pluck('characterID', 'eventID',
-                'eventDate', 'eventTitle', 'importance', 'response', 'created_at', 'updated_at'));
-
-            DB::connection('target')->table('character_calendar_event_details')->insert($chunk->pluck('eventID',
-                'ownerID', 'ownerName', 'duration', 'eventText', 'ownerTypeID', 'created_at', 'updated_at'));
-
-        });
-
-        UpcomingCalendarEvent::where('upgraded', false)->update(['upgraded' => true]);
-*/
-
-        // ** CORPORATION START HERE ** //
-
         $this->info('The process has successfully ended. Your new SeAT 3.0.0 is now ready for update and usage.');
 
     }
