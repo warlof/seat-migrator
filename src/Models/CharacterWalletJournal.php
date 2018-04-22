@@ -16,6 +16,8 @@ use Seat\Upgrader\Services\MappingCollection;
 class CharacterWalletJournal extends WalletJournal implements ICoreUpgrade
 {
 
+    public $incrementing = false;
+
     public function upgrade(string $target)
     {
         $sql = "INSERT IGNORE INTO character_wallet_journals (character_id, id, `date`, ref_type, first_party_id, " .
