@@ -40,6 +40,13 @@ class CharacterBookmark extends Bookmark implements ICoreUpgrade
                 'created_at'  => 'created_at',
                 'updated_at'  => 'updated_at',
             ],
+            'character_bookmark_folders' => [
+                'characterID' => 'character_id',
+                'folderID'    => 'folder_id',
+                'folderName'  => 'name',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
         ];
     }
 

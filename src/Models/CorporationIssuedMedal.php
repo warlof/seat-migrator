@@ -34,6 +34,17 @@ class CorporationIssuedMedal extends MemberMedal implements ICoreUpgrade
                 'created_at'    => 'created_at',
                 'updated_at'    => 'updated_at',
             ],
+            'character_medals' => [
+                'characterID'   => 'character_id',
+                'medalID'       => 'medal_id',
+                'reason'        => 'reason',
+                'corporationID' => 'corporation_id',
+                'issuerID'      => 'issuer_id',
+                'issued'        => 'date',
+                'status'        => 'status',
+                'created_at'    => 'created_at',
+                'updated_at'    => 'updated_at',
+            ],
         ];
     }
 

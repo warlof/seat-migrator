@@ -58,6 +58,32 @@ class CharacterPlanetPin extends PlanetaryPin implements ICoreUpgrade
                 'created_at'     => 'created_at',
                 'updated_at'     => 'updated_at',
             ],
+            'character_planet_contents' => [
+                'ownerID'         => 'character_id',
+                'planetID'        => 'planet_id',
+                'pinID'           => 'pin_id',
+                'contentTypeID'   => 'type_id',
+                'contentQuantity' => 'amount',
+                'created_at'      => 'created_at',
+                'updated_at'      => 'updated_at',
+            ],
+            'character_planet_extractors' => [
+                'ownerID'          => 'character_id',
+                'planetID'         => 'planet_id',
+                'pinID'            => 'pin_id',
+                'cycleTime'        => 'cycle_time',
+                'quantityPerCycle' => 'qty_per_cycle',
+                'created_at'       => 'created_at',
+                'updated_at'       => 'updated_at',
+            ],
+            'character_planet_factories' => [
+                'ownerID'     => 'character_id',
+                'planetID'    => 'planet_id',
+                'pinID'       => 'pin_id',
+                'schematicID' => 'schematic_id',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
         ];
     }
 

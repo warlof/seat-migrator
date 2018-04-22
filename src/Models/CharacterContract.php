@@ -83,6 +83,12 @@ class CharacterContract extends Contract implements ICoreUpgrade
                 'created_at'      => 'created_at',
                 'updated_at'      => 'updated_at',
             ],
+            'character_contracts' => [
+                'characterID' => 'character_id',
+                'contractID'  => 'contract_id',
+                'created_at'  => 'created_at',
+                'updated_at'  => 'updated_at',
+            ],
         ];
     }
 

@@ -43,8 +43,14 @@ class MappingCollection extends Collection
             DB::connection($target)->table($table)->insert($this->map(function($item, $key) use ($columns) {
                 $new = [];
 
-                foreach ($columns as $src_column => $dst_column)
-                    $new[$dst_column] = $item->{$src_column};
+                foreach ($columns as $src_column => $dst_column) {
+                    if (is_array($dst_column)) {
+                        foreach ($dst_column as $column)
+                            $new[$column] = $item->{$src_column};
+                    } else {
+                        $new[$dst_column] = $item->{$src_column};
+                    }
+                }
 
                 return $new;
             })->toArray());

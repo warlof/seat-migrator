@@ -2,22 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: Warlof Tutsimo
- * Date: 19/04/2018
- * Time: 10:35
+ * Date: 22/04/2018
+ * Time: 22:43
  */
 
 namespace Seat\Upgrader\Models;
 
-use Seat\Eveapi\Models\Character\ChatChannel;
+
+use Seat\Eveapi\Models\Eve\CharacterInfo;
 use Seat\Upgrader\Services\MappingCollection;
-use Seat\Upgrader\Traits\HasCompositePrimaryKey;
 
-class CharacterChatChannel extends ChatChannel implements ICoreUpgrade
+class CharacterShip extends CharacterInfo implements ICoreUpgrade
 {
-    use HasCompositePrimaryKey;
-
-    protected $primaryKey = ['characterID', 'channelID'];
-
     public function upgrade(string $target)
     {
         // TODO: Implement upgrade() method.
@@ -26,12 +22,13 @@ class CharacterChatChannel extends ChatChannel implements ICoreUpgrade
     public function getUpgradeMapping(): array
     {
         return [
-            'character_chat_channels' => [
+            'character_ships' => [
                 'characterID' => 'character_id',
-                'channelID'   => ['channel_id', 'channel_info_id'],
+                'shipTypeID'  => 'ship_item_id',
+                'shipName'    => 'ship_name',
                 'created_at'  => 'created_at',
                 'updated_at'  => 'updated_at',
-            ]
+            ],
         ];
     }
 
