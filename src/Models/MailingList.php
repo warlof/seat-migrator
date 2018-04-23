@@ -6,13 +6,12 @@
  * Time: 09:30
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
-use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\MailingListInfo;
-use Seat\Upgrader\Services\MappingCollection;
-use Seat\Upgrader\Traits\HasCompositePrimaryKey;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
+use Warlof\Seat\Migrator\Traits\HasCompositePrimaryKey;
 
 class MailingList extends \Seat\Eveapi\Models\Character\MailingList implements ICoreUpgrade
 {
@@ -21,26 +20,16 @@ class MailingList extends \Seat\Eveapi\Models\Character\MailingList implements I
 
     protected $primaryKey = ['characterID', 'listID'];
 
-    public function upgrade(string $target)
+    public function getDisplayNameAttribute()
     {
-        $sql = "INSERT IGNORE INTO mail_mailing_lists (character_id, mailing_list_id, `name`, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?)";
+        $mailing_list = MailingListInfo::find($this->listID);
 
-        $info = MailingListInfo::find($this->listID);
+        if (is_null($mailing_list))
+            return '';
 
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->listID,
-            $info->displayName,
-            $this->created_at,
-            $this->updated_at,
-        ]);
-
-        $info->upgraded = true;
-        $info->save();
-
-        $this->upgraded = true;
-        $this->save();
+        $mailing_list->upgraded = true;
+        $mailing_list->save();
+        return $mailing_list->displayName;
     }
 
     public function getUpgradeMapping(): array

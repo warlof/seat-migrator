@@ -6,12 +6,12 @@
  * Time: 14:39
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\ContactList;
-use Seat\Upgrader\Services\MappingCollection;
-use Seat\Upgrader\Traits\HasCompositePrimaryKey;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
+use Warlof\Seat\Migrator\Traits\HasCompositePrimaryKey;
 
 class CorporationContact extends ContactList implements ICoreUpgrade
 {
@@ -20,9 +20,18 @@ class CorporationContact extends ContactList implements ICoreUpgrade
 
     protected $primaryKey = ['corporationID', 'contactID'];
 
-    public function upgrade(string $target)
+    public function getContactTypeIDAttribute($value)
     {
-        // TODO: Implement upgrade() method.
+        if ($value == 2)
+            return 'corporation';
+
+        if ($value == 16159)
+            return 'alliance';
+
+        if ($value == 30)
+            return 'faction';
+
+        return 'character';
     }
 
     public function getUpgradeMapping(): array

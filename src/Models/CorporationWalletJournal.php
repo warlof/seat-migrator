@@ -6,20 +6,20 @@
  * Time: 16:11
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\WalletJournal;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationWalletJournal extends WalletJournal implements ICoreUpgrade
 {
 
     public $incrementing = false;
 
-    public function upgrade(string $target)
+    public function getAccountKeyAttribute($value)
     {
-        // TODO: Implement upgrade() method.
+        return $value - 999;
     }
 
     public function getUpgradeMapping(): array

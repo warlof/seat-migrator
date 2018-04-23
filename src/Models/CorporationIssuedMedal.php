@@ -6,18 +6,24 @@
  * Time: 15:23
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
+use Seat\Eveapi\Models\Corporation\Medal;
 use Seat\Eveapi\Models\Corporation\MemberMedal;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationIssuedMedal extends MemberMedal implements ICoreUpgrade
 {
 
-    public function upgrade(string $target)
+    public function getTitleAttribute()
     {
-        // TODO: Implement upgrade() method.
+        $medal = Medal::find($this->medalID);
+
+        if (! is_null($medal))
+            return $medal->title;
+
+        return '';
     }
 
     public function getUpgradeMapping(): array
@@ -37,6 +43,7 @@ class CorporationIssuedMedal extends MemberMedal implements ICoreUpgrade
             'character_medals' => [
                 'characterID'   => 'character_id',
                 'medalID'       => 'medal_id',
+                'title'         => 'title',
                 'reason'        => 'reason',
                 'corporationID' => 'corporation_id',
                 'issuerID'      => 'issuer_id',

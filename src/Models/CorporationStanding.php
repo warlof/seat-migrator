@@ -6,19 +6,14 @@
  * Time: 15:57
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\Standing;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationStanding extends Standing implements ICoreUpgrade
 {
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
-
     public function getUpgradeMapping(): array
     {
         return [

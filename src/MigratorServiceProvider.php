@@ -6,14 +6,14 @@
  * Time: 17:11
  */
 
-namespace Seat\Upgrader;
+namespace Warlof\Seat\Migrator;
 
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use Seat\Upgrader\Commands\SchemaUpgrade;
+use Warlof\Seat\Migrator\Commands\SchemaUpgrade;
 
-class UpgraderServiceProvider extends ServiceProvider
+class MigratorServiceProvider extends ServiceProvider
 {
 
     public function boot()
@@ -34,7 +34,7 @@ class UpgraderServiceProvider extends ServiceProvider
     private function addPublications()
     {
         $this->publishes([
-            __DIR__ . '/database/migrations/' => database_path('migrations'),
+            __DIR__ . '/Database/migrations/' => database_path('migrations'),
         ]);
     }
 

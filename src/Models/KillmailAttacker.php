@@ -6,23 +6,18 @@
  * Time: 19:31
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\KillMail\Attacker;
-use Seat\Upgrader\Services\MappingCollection;
-use Seat\Upgrader\Traits\HasCompositePrimaryKey;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
+use Warlof\Seat\Migrator\Traits\HasCompositePrimaryKey;
 
 class KillmailAttacker extends Attacker implements ICoreUpgrade
 {
     use HasCompositePrimaryKey;
 
     protected $primaryKey = ['killID', 'characterID'];
-
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
 
     public function getUpgradeMapping(): array
     {

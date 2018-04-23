@@ -6,19 +6,14 @@
  * Time: 14:49
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\Contract;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationContract extends Contract implements ICoreUpgrade
 {
-
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
 
     public function getUpgradeMapping(): array
     {

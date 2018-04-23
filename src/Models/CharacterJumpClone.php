@@ -6,43 +6,34 @@
  * Time: 10:35
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
-use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterSheetJumpClone;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterJumpClone extends CharacterSheetJumpClone implements ICoreUpgrade
 {
 
-    public function upgrade(string $target)
+    public function getLocationTypeAttribute()
     {
-        $sql = "INSERT IGNORE INTO character_jump_clones (character_id, jump_clone_id, name, location_id, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?)";
+        if ((60000000 <= $this->locationID && $this->locationID <= 64000000) ||
+            (68000000 <= $this->locationID && $this->locationID <= 70000000))
+            return 'station';
 
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->jumpCloneID,
-            $this->cloneName,
-            $this->locationID,
-            $this->created_at,
-            $this->updated_at,
-        ]);
-
-        $this->upgraded = true;
-        $this->save();
+        return 'structure';
     }
 
     public function getUpgradeMapping(): array
     {
         return [
             'character_jump_clones' => [
-                'characterID' => 'character_id',
-                'jumpCloneID' => 'jump_clone_id',
-                'cloneName'   => 'name',
-                'locationID'  => 'location_id',
-                'created_at'  => 'created_at',
-                'updated_at'  => 'updated_at',
+                'characterID'  => 'character_id',
+                'jumpCloneID'  => 'jump_clone_id',
+                'cloneName'    => 'name',
+                'locationID'   => 'location_id',
+                'locationType' => 'location_type',
+                'created_at'   => 'created_at',
+                'updated_at'   => 'updated_at',
             ],
         ];
     }

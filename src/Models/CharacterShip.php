@@ -6,19 +6,14 @@
  * Time: 22:43
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Eve\CharacterInfo;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterShip extends CharacterInfo implements ICoreUpgrade
 {
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
-
     public function getUpgradeMapping(): array
     {
         return [

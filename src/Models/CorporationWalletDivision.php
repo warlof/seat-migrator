@@ -6,20 +6,23 @@
  * Time: 15:46
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\CorporationSheetWalletDivision;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationWalletDivision extends CorporationSheetWalletDivision implements ICoreUpgrade
 {
 
-    public $type = 'wallet';
-
-    public function upgrade(string $target)
+    public function getTypeAttribute()
     {
-        // TODO: Implement upgrade() method.
+        return 'wallet';
+    }
+
+    public function getAccountKeyAttribute($value)
+    {
+        return $value - 999;
     }
 
     public function getUpgradeMapping(): array

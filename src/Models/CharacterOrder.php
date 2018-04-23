@@ -6,19 +6,14 @@
  * Time: 12:06
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Character\MarketOrder;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterOrder extends MarketOrder implements ICoreUpgrade
 {
-
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
 
     public function getUpgradeMapping(): array
     {

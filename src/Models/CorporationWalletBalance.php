@@ -6,18 +6,17 @@
  * Time: 14:20
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\AccountBalance;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationWalletBalance extends AccountBalance implements ICoreUpgrade
 {
-
-    public function upgrade(string $target)
+    public function getAccountKeyAttribute($value)
     {
-        // TODO: Implement upgrade() method.
+        return $value - 999;
     }
 
     public function getUpgradeMapping(): array

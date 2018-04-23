@@ -6,7 +6,7 @@
  * Time: 16:54
  */
 
-namespace Seat\Upgrader\Services;
+namespace Warlof\Seat\Migrator\Database\Query\Grammars;
 
 
 use Illuminate\Database\Query\Builder;

@@ -6,7 +6,7 @@
  * Time: 18:52
  */
 
-namespace Seat\Upgrader\Traits;
+namespace Warlof\Seat\Migrator\Traits;
 
 
 use Illuminate\Database\Eloquent\Builder;

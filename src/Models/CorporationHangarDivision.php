@@ -6,20 +6,23 @@
  * Time: 15:43
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\CorporationSheetDivision;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationHangarDivision extends CorporationSheetDivision implements ICoreUpgrade
 {
 
-    public $type = 'hangar';
-
-    public function upgrade(string $target)
+    public function getTypeAttribute()
     {
-        // TODO: Implement upgrade() method.
+        return 'hangar';
+    }
+
+    public function getAccountKeyAttribute($value)
+    {
+        return $value - 999;
     }
 
     public function getUpgradeMapping(): array

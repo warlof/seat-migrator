@@ -6,12 +6,12 @@
  * Time: 22:17
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\MailMessage;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class MailHeader extends MailMessage implements ICoreUpgrade
 {
@@ -86,6 +86,7 @@ class MailHeader extends MailMessage implements ICoreUpgrade
         return [
             'mail_headers' => [
                 'characterID' => 'character_id',
+                'messageID'   => 'mail_id',
                 'title'       => 'subject',
                 'senderID'    => 'from',
                 'sentDate'    => 'timestamp',

@@ -6,50 +6,25 @@
  * Time: 13:42
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
-use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\WalletTransaction;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterWalletTransaction extends WalletTransaction implements ICoreUpgrade
 {
 
     public $incrementing = false;
 
-    public function upgrade(string $target)
+    public function getTransactionTypeAttribute($value)
     {
-        $sql = "INSERT IGNORE INTO character_wallet_transactions (character_id, transaction_id, `date`, type_id, " .
-               "location_id, unit_price, quantity, client_id, is_buy, is_personal, journal_ref_id, created_at, updated_at)" .
-               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        return ($value == 'buy');
+    }
 
-        $type = false;
-        if ($this->transactionType == 'buy')
-            $type = true;
-
-        $personal = false;
-        if ($this->transactionFor == 'personal')
-            $personal = true;
-
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->transactionID,
-            $this->transactionDateTime,
-            $this->typeID,
-            $this->stationID,
-            $this->price,
-            $this->quantity,
-            $this->clientID,
-            $type,
-            $personal,
-            $this->journalTransactionID,
-            $this->created_at,
-            $this->updated_at,
-        ]);
-
-        $this->upgraded = true;
-        $this->save();
+    public function getTransactionForAttribute($value)
+    {
+        return ($value == 'personal');
     }
 
     public function getUpgradeMapping(): array
@@ -64,6 +39,8 @@ class CharacterWalletTransaction extends WalletTransaction implements ICoreUpgra
                 'price'                => 'unit_price',
                 'quantity'             => 'quantity',
                 'clientID'             => 'client_id',
+                'transactionType'      => 'is_buy',
+                'transactionFor'       => 'is_personal',
                 'journalTransactionID' => 'journal_ref_id',
                 'created_at'           => 'created_at',
                 'updated_at'           => 'updated_at',

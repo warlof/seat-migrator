@@ -6,7 +6,7 @@
  * Time: 17:13
  */
 
-namespace Seat\Upgrader\Commands;
+namespace Warlof\Seat\Migrator\Commands;
 
 
 use Illuminate\Console\Command;
@@ -103,39 +103,6 @@ class SchemaUpgrade extends Command
 
         CharacterSheetJumpCloneImplants::where('upgraded', false)->update(['upgraded' => true]);
 
-        // TODO
-/*
-        $records = ContactListCorporate::where('upgraded', false)->get();
-
-        $this->comment(sprintf('Proceed upgrade from character_contact_list_corporates to corporation_contacts (%s)',
-            $records->count()));
-
-        $records->each(function($record) {
-
-            $record->upgrade(SELF::TARGETED_BASE);
-
-        });
-*/
-        // TODO
-/*
-        $records = ContactNotifications::where('upgraded', false)->get();
-
-        $this->comment(sprintf('Proceed upgrade from character_contact_notifications to character_notifications (%s)',
-            $records->count()));
-
-        $records->chunk(self::CHUNK_SIZE)->each(function($chunk) {
-
-            // TODO : implement sender_type and type fields
-
-            DB::connection('target')->table('character_notifications')->insert($chunk->pluck('characterID',
-                'notificationID', 'senderID', 'sentDate', 'messageData', 'created_at', 'updated_at'));
-
-            DB::table('character_notifications')
-                ->whereIn('notificationID', $chunk->pluck('notificationID'))
-                ->update('upgraded', true);
-
-        });
-*/
         $this->info('The process has successfully ended. Your new SeAT 3.0.0 is now ready for update and usage.');
 
     }

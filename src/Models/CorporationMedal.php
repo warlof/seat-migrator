@@ -6,19 +6,14 @@
  * Time: 15:20
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\Medal;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationMedal extends Medal implements ICoreUpgrade
 {
-
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
 
     public function getUpgradeMapping(): array
     {
@@ -28,7 +23,7 @@ class CorporationMedal extends Medal implements ICoreUpgrade
                 'corporationID' => 'corporation_id',
                 'title'         => 'title',
                 'description'   => 'description',
-                'creator_id'    => 'creator_id',
+                'creatorID'     => 'creator_id',
                 'created_at'    => 'created_at',
                 'updated_at'    => 'updated_at',
             ],

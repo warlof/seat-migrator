@@ -6,52 +6,64 @@
  * Time: 19:30
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
-use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\Contract;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterContract extends Contract implements ICoreUpgrade
 {
 
-    public function upgrade(string $target)
+    public function getTypeAttribute($value)
     {
-        $sql = "INSERT IGNORE INTO contract_details (contract_id, issuer_id, issuer_corporation_id, assignee_id, acceptor_id, " .
-               "start_location_id, end_location_id, `type`, status, title, for_corporation, availability, date_issued, " .
-               "date_expired, date_accepted, days_to_complete, date_completed, price, reward, collateral, buyout, volume, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if ($value == 'ItemExchange')
+            return 'item_exchange';
 
-        DB::connection($target)->insert($sql, [
-            $this->contractID,
-            $this->issuerID,
-            $this->issuerCorpID,
-            $this->assigneeID,
-            $this->acceptorID,
-            $this->startStationID,
-            $this->endStationID,
-            $this->type,
-            $this->status,
-            $this->title,
-            $this->forCorp,
-            $this->availability,
-            $this->dateIssued,
-            $this->dateExpired,
-            $this->dateAccepted,
-            $this->numDays,
-            $this->dateCompleted,
-            $this->price,
-            $this->reward,
-            $this->collateral,
-            $this->buyout,
-            $this->volume,
-            $this->created_at,
-            $this->updated_at,
-        ]);
+        if ($value == 'Courier')
+            return 'courier';
 
-        $this->upgraded = true;
-        $this->save();
+        if ($value == 'Auction')
+            return 'auction';
+
+        return 'unknown';
+    }
+
+    public function getStatusAttribute($value)
+    {
+        if ($value == 'Completed')
+            return 'finished';
+
+        if ($value == 'Failed')
+            return 'failed';
+
+        if ($value == 'Deleted')
+            return 'deleted';
+
+        if ($value == 'Outstanding')
+            return 'outstanding';
+
+        if ($value == 'InProgress')
+            return 'in_progress';
+
+        if ($value == 'CompletedByContractor')
+            return 'finished_contractor';
+
+        if ($value == 'Rejected')
+            return 'rejected';
+
+        return 'reversed';
+    }
+
+    public function getAvailabilityAttribute($value)
+    {
+        if ($value == 'Private')
+            return 'personal';
+
+        if ($value == 'Public')
+            return 'public';
+
+        return 'corporation';
     }
 
     public function getUpgradeMapping(): array

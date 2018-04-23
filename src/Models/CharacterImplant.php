@@ -6,30 +6,13 @@
  * Time: 10:35
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
-use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterSheetImplants;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterImplant extends CharacterSheetImplants implements ICoreUpgrade
 {
-
-    public function upgrade(string $target)
-    {
-        $sql = "INSERT IGNORE INTO character_implants (character_id, type_id, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?)";
-
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->typeID,
-            $this->created_at,
-            $this->updated_at,
-        ]);
-
-        $this->upgraded = true;
-        $this->save();
-    }
 
     public function getUpgradeMapping(): array
     {

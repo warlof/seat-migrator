@@ -6,19 +6,14 @@
  * Time: 16:01
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\Starbase;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationStarbase extends Starbase implements ICoreUpgrade
 {
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
-
     public function getUpgradeMapping(): array
     {
         return [

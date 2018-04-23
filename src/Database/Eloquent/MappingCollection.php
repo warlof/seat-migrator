@@ -6,11 +6,12 @@
  * Time: 11:32
  */
 
-namespace Seat\Upgrader\Services;
+namespace Warlof\Seat\Migrator\Database\Eloquent;
 
 
-use \Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Warlof\Seat\Migrator\Database\Query\Grammars\CustomMySqlGrammar;
 
 class MappingCollection extends Collection
 {
@@ -24,7 +25,7 @@ class MappingCollection extends Collection
     }
 
     /**
-     * Transfer all date from the collection to the targeted database according to the model mapping
+     * Transfer all date from the collection to the targeted Database according to the model mapping
      *
      * @param string $target
      */

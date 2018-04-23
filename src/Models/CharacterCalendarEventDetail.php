@@ -6,18 +6,30 @@
  * Time: 20:04
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Character\UpcomingCalendarEvent;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterCalendarEventDetail extends UpcomingCalendarEvent implements ICoreUpgrade
 {
 
-    public function upgrade(string $target)
+    public function getOwnerTypeIDAttribute($value)
     {
-        // TODO: Implement upgrade() method.
+        if ($value == 0)
+            return 'eve_server';
+
+        if ($value == 2)
+            return 'corporation';
+
+        if ($value == 16159)
+            return 'alliance';
+
+        if ($value == 30)
+            return 'faction';
+
+        return 'character';
     }
 
     public function getUpgradeMapping(): array

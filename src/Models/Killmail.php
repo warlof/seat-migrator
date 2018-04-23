@@ -6,12 +6,12 @@
  * Time: 18:16
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\KillMail\Attacker;
 use Seat\Eveapi\Models\KillMail\Detail;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class Killmail extends Detail implements ICoreUpgrade
 {
@@ -38,11 +38,6 @@ class Killmail extends Detail implements ICoreUpgrade
     public function attackers()
     {
         return $this->hasMany(Attacker::class, 'killID', 'killID');
-    }
-
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
     }
 
     public function getUpgradeMapping(): array

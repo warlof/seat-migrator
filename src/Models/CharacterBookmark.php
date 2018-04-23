@@ -6,11 +6,11 @@
  * Time: 10:35
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
-use Illuminate\Support\Facades\DB;
+
 use Seat\Eveapi\Models\Character\Bookmark;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterBookmark extends Bookmark implements ICoreUpgrade
 {
@@ -48,33 +48,6 @@ class CharacterBookmark extends Bookmark implements ICoreUpgrade
                 'updated_at'  => 'updated_at',
             ],
         ];
-    }
-
-    public function upgrade(string $target)
-    {
-        $sql = $this->getUpgradeQuery();
-
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->bookmarkID,
-            $this->folderID,
-            $this->created,
-            $this->creatorID,
-            $this->itemID,
-            $this->memo,
-            $this->locationID,
-            $this->note,
-            $this->typeID,
-            $this->x,
-            $this->y,
-            $this->z,
-            $this->created_at,
-            $this->updated_at,
-        ]);
-
-        $this->upgraded = true;
-        $this->save();
-
     }
 
 }

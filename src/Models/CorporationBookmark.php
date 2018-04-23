@@ -6,20 +6,14 @@
  * Time: 14:32
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\Bookmark;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationBookmark extends Bookmark implements ICoreUpgrade
 {
-
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
-
     public function getUpgradeMapping(): array
     {
         return [
@@ -43,7 +37,7 @@ class CorporationBookmark extends Bookmark implements ICoreUpgrade
             ],
             'corporation_bookmark_folders' => [
                 'corporationID' => 'corporation_id',
-                'foolderID'     => 'folder_id',
+                'folderID'     => 'folder_id',
                 'folderName'    => 'name',
                 'created_at'    => 'created_at',
                 'updated_at'    => 'updated_at',

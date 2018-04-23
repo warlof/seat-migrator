@@ -6,49 +6,45 @@
  * Time: 19:10
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
-use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\Notifications;
-use Seat\Upgrader\Services\MappingCollection;
+use Seat\Eveapi\Models\Character\NotificationsText;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterNotification extends Notifications implements ICoreUpgrade
 {
 
-    public function upgrade(string $target)
+    public function getSenderTypeAttribute()
     {
-        $sql = "INSERT IGNORE INTO character_notifications (character_id, notification_id, `type`, sender_id, " .
-               "sender_type, `timestamp`, is_read, text, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        if ((3000000 >= $this->senderID && $this->senderID <= 4000000) ||
+            (90000000 >= $this->senderID && $this->senderID <= 98000000))
+            return 'character';
 
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->notificationID,
-            $this->typeID, // TODO : convert
-            $this->senderID,
-            function(){
-                if ((3000000 >= $this->senderID && $this->senderID <= 4000000) ||
-                    (90000000 >= $this->senderID && $this->senderID <= 98000000))
-                    return 'character';
-                if ((1000000 >= $this->senderID && $this->senderID <= 2000000) ||
-                    (98000000 >= $this->senderID && $this->senderID <= 99000000))
-                    return 'corporation';
-                if (99000000 >= $this->senderID && $this->senderID <= 100000000)
-                    return 'alliance';
-                if (500000 >= $this->senderID && $this->senderID <= 1000000)
-                    return 'faction';
-                return 'other';
-            },
-            $this->sentDate,
-            $this->read,
-            '',
-            $this->created_at,
-            $this->updated_at,
-        ]);
+        if ((1000000 >= $this->senderID && $this->senderID <= 2000000) ||
+            (98000000 >= $this->senderID && $this->senderID <= 99000000))
+            return 'corporation';
 
-        $this->upgraded = true;
-        $this->save();
+        if (99000000 >= $this->senderID && $this->senderID <= 100000000)
+            return 'alliance';
+
+        if (500000 >= $this->senderID && $this->senderID <= 1000000)
+            return 'faction';
+
+        return 'other';
+    }
+
+    public function getTextAttribute()
+    {
+        $notification = NotificationsText::find($this->notificationID);
+
+        if (is_null($notification))
+            return '';
+
+        $notification->upgraded = true;
+        $notification->save();
+        return $notification->text;
     }
 
     public function getUpgradeMapping(): array
@@ -59,7 +55,9 @@ class CharacterNotification extends Notifications implements ICoreUpgrade
                 'notificationID' => 'notification_id',
                 'typeID'         => 'type',
                 'senderID'       => 'sender_id',
+                'senderType'     => 'sender_type',
                 'sentDate'       => 'timestamp',
+                'text'           => 'text',
                 'read'           => 'is_read',
                 'created_at'     => 'created_at',
                 'updated_at'     => 'updated_at',

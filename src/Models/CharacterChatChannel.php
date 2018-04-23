@@ -6,22 +6,17 @@
  * Time: 10:35
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 use Seat\Eveapi\Models\Character\ChatChannel;
-use Seat\Upgrader\Services\MappingCollection;
-use Seat\Upgrader\Traits\HasCompositePrimaryKey;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
+use Warlof\Seat\Migrator\Traits\HasCompositePrimaryKey;
 
 class CharacterChatChannel extends ChatChannel implements ICoreUpgrade
 {
     use HasCompositePrimaryKey;
 
     protected $primaryKey = ['characterID', 'channelID'];
-
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
 
     public function getUpgradeMapping(): array
     {

@@ -6,93 +6,56 @@
  * Time: 11:26
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
-use Illuminate\Support\Facades\DB;
-use Seat\Upgrader\Services\MappingCollection;
+use Seat\Eveapi\Models\Character\CharacterSheetSkills;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterSheet extends \Seat\Eveapi\Models\Character\CharacterSheet implements ICoreUpgrade
 {
 
-    public function upgrade(string $target)
+    public function getRaceAttribute($value)
     {
-        $sql = "INSERT IGNORE INTO character_infos (character_id, `name`, corporation_id, alliance_id, birthday, " .
-               "gender, race_id, bloodline_id, ancenstry_id, faction_id, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if ($value == 'Gallente')
+            return 8;
 
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->name,
-            $this->corporationID,
-            $this->allianceID,
-            $this->DoB,
-            $this->gender,
-            $this->race,
-            $this->bloodLineID,
-            $this->ancestryID,
-            $this->factionID,
-            $this->created_at,
-            $this->updated_at,
-        ]);
+        if ($value == 'Minmatar')
+            return 2;
 
-        $sql = "INSERT IGNORE INTO character_attributes (character_id, charisma, intelligence, memory, perception, " .
-               "willpower, bonus_remaps, last_remap_date, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if ($value == 'Amarr')
+            return 4;
 
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->charisma,
-            $this->intelligence,
-            $this->memory,
-            $this->perception,
-            $this->willpower,
-            $this->freeRespecs,
-            $this->lastRespecDate,
-            $this->created_at,
-            $this->updated_at,
-        ]);
+        if ($value == 'Caldari')
+            return 1;
 
-        $sql = "INSERT IGNORE INTO character_clones (character_id, home_location_id, home_location_type, " .
-               "last_station_change_date, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?)";
+        if ($value == 'Jove')
+            return 16;
 
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->homeStationID,
-            ((60000000 >= $this->homeStationID && $this->homeStationID <= 64000000) ||
-             (68000000 >= $this->homeStationID && $this->homeStationID <= 70000000)) ? 'station' : 'structure',
-            $this->remoteStationDate,
-            $this->created_at,
-            $this->updated_at,
-        ]);
+        if ($value == 'Pirate')
+            return 32;
 
-        $sql = "INSERT IGNORE INTO character_info_skills (character_id, total_sp, unallocated_sp, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?)";
+        if ($value == 'Sleepers')
+            return 64;
 
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->freeSkillPoints,
-            $this->cloneSkillPoints,
-            $this->created_at,
-            $this->updated_at,
-        ]);
+        if ($value == 'ORE')
+            return 128;
 
-        $sql = "INSERT IGNORE INTO character_fatigues (character_id, last_jump_date, jump_fatigue_expire_date, " .
-               "last_update_date, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?)";
+        return 0;
+    }
 
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->cloneJumpDate,
-            $this->jumpFatigue,
-            $this->jumpLastUpdate,
-            $this->created_at,
-            $this->updated_at,
-        ]);
+    public function getHomeLocationTypeAttribute()
+    {
+        if ((60000000 >= $this->homeStationID && $this->homeStationID <= 64000000) ||
+            (68000000 >= $this->homeStationID && $this->homeStationID <= 70000000))
+            return 'station';
 
-        $this->upgraded = true;
-        $this->save();
+        return 'structure';
+    }
+
+    public function getCloneSkillPoints($value)
+    {
+        return CharacterSheetSkills::where('characterID', $this->characterID)->sum('skillpoints');
     }
 
     public function getUpgradeMapping(): array
@@ -125,8 +88,10 @@ class CharacterSheet extends \Seat\Eveapi\Models\Character\CharacterSheet implem
                 'updated_at'     => 'updated_at',
             ],
             'character_clones'      => [
-                'characterID'   => 'character_id',
-                'homeStationID' => 'home_location_id',
+                'characterID'       => 'character_id',
+                'cloneJumpDate'     => 'last_clone_jump_date',
+                'homeStationID'     => 'home_location_id',
+                'homeLocationType'  => 'home_location_type',
                 'remoteStationDate' => 'last_station_change_date',
                 'created_at'        => 'created_at',
                 'updated_at'        => 'updated_at',

@@ -6,45 +6,16 @@
  * Time: 13:33
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
-use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\WalletJournal;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterWalletJournal extends WalletJournal implements ICoreUpgrade
 {
 
     public $incrementing = false;
-
-    public function upgrade(string $target)
-    {
-        $sql = "INSERT IGNORE INTO character_wallet_journals (character_id, id, `date`, ref_type, first_party_id, " .
-               "second_party_id, amount, balance, reason, tax_receiver_id, tax, context_id, ".
-               "created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        DB::connection($target)->insert($sql, [
-            $this->characterID,
-            $this->refID,
-            $this->date,
-            $this->refTypeID,
-            $this->ownerID1,
-            $this->ownerID2,
-            $this->amount,
-            $this->balance,
-            $this->reason,
-            $this->taxReceiverID,
-            $this->taxAmount,
-            $this->argID1,
-            $this->created_at,
-            $this->updated_at,
-        ]);
-
-        $this->upgraded = true;
-        $this->save();
-    }
 
     public function getUpgradeMapping(): array
     {

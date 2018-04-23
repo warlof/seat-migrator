@@ -6,12 +6,11 @@
  * Time: 12:09
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
-use Illuminate\Support\Facades\DB;
-use Seat\Upgrader\Services\MappingCollection;
-use Seat\Upgrader\Traits\HasCompositePrimaryKey;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
+use Warlof\Seat\Migrator\Traits\HasCompositePrimaryKey;
 
 class ContactListCorporate extends \Seat\Eveapi\Models\Character\ContactListCorporate implements ICoreUpgrade
 {
@@ -20,23 +19,18 @@ class ContactListCorporate extends \Seat\Eveapi\Models\Character\ContactListCorp
 
     protected $primaryKey = ['characterID', 'corporationID', 'contactID'];
 
-    public function upgrade(string $target)
+    public function getContactTypeIDAttribute($value)
     {
-        $sql = "INSERT IGNORE INTO corporation_contacts (corporation_id, contact_id, standing, contact_type, label_id, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        if ($value == 2)
+            return 'corporation';
 
-        DB::connection($target)->insert($sql, [
-            $this->corporationID,
-            $this->contactID,
-            $this->standing,
-            $this->contactTypeID,
-            $this->labelMask,
-            $this->created_at,
-            $this->updated_at
-        ]);
+        if ($value == 16159)
+            return 'alliance';
 
-        $this->upgraded = true;
-        $this->save();
+        if ($value == 30)
+            return 'faction';
+
+        return 'character';
     }
 
     public function getUpgradeMapping(): array

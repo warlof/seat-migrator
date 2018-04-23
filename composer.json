@@ -12,7 +12,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Seat\\Upgrader\\": "src/"
+      "Warlof\\Seat\\Migrator\\": "src/"
     }
   },
   "require": {

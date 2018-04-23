@@ -6,11 +6,11 @@
  * Time: 15:27
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\MemberTracking;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationMemberTracking extends MemberTracking implements ICoreUpgrade
 {
@@ -39,11 +39,6 @@ class CorporationMemberTracking extends MemberTracking implements ICoreUpgrade
         return $this->locationID + 2147483647;
     }
 
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
-
     public function getUpgradeMapping(): array
     {
         return [
@@ -67,7 +62,7 @@ class CorporationMemberTracking extends MemberTracking implements ICoreUpgrade
             ],
             'character_onlines' => [
                 'characterID'    => 'character_id',
-                'online'         => 'online', // TODO : add attribute
+                'online'         => 'online',
                 'logonDateTime'  => 'last_login',
                 'logoffDateTime' => 'last_logout',
                 'created_at'     => 'created_at',

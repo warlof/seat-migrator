@@ -6,13 +6,11 @@
  * Time: 12:10
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 interface ICoreUpgrade
 {
-
-    public function upgrade(string $target);
 
     public function getUpgradeMapping() : array;
 

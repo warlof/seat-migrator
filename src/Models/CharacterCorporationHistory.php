@@ -6,12 +6,12 @@
  * Time: 17:56
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Eve\CharacterInfoEmploymentHistory;
-use Seat\Upgrader\Services\MappingCollection;
-use Seat\Upgrader\Traits\HasCompositePrimaryKey;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
+use Warlof\Seat\Migrator\Traits\HasCompositePrimaryKey;
 
 class CharacterCorporationHistory extends CharacterInfoEmploymentHistory implements ICoreUpgrade
 {
@@ -19,11 +19,6 @@ class CharacterCorporationHistory extends CharacterInfoEmploymentHistory impleme
     use HasCompositePrimaryKey;
 
     protected $primaryKey = ['characterID', 'recordID'];
-
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
 
     public function getUpgradeMapping(): array
     {

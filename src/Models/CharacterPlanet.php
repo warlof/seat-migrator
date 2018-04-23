@@ -6,22 +6,17 @@
  * Time: 11:04
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
-use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\PlanetaryColony;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterPlanet extends PlanetaryColony implements ICoreUpgrade
 {
 
-    public function upgrade(string $target)
+    public function getPlanetTypeAttribute()
     {
-        $sql = "INSERT IGNORE INTO character_planets (character_id, solar_system_id, planet_id, upgrade_level, " .
-               "num_pins, last_update, planet_type, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
         $types = [
             11    => 'temperate',
             12    => 'ice',
@@ -34,20 +29,7 @@ class CharacterPlanet extends PlanetaryColony implements ICoreUpgrade
             30889 => 'shattered',
         ];
 
-        DB::connection($target)->insert($sql, [
-            $this->ownerID,
-            $this->solarSystemID,
-            $this->planetID,
-            $this->upgradeLevel,
-            $this->numberOfPins,
-            $this->lastUpdate,
-            $types[$this->planetTypeID],
-            $this->created_at,
-            $this->updated_at,
-        ]);
-
-        $this->upgraded = true;
-        $this->save();
+        return $types[$this->planetTypeID];
     }
 
     public function getUpgradeMapping(): array

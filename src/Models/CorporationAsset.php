@@ -6,12 +6,12 @@
  * Time: 14:24
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\AssetList;
-use Seat\Upgrader\Services\MappingCollection;
-use Seat\Upgrader\Traits\HasCompositePrimaryKey;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
+use Warlof\Seat\Migrator\Traits\HasCompositePrimaryKey;
 
 class CorporationAsset extends AssetList implements ICoreUpgrade
 {
@@ -19,11 +19,6 @@ class CorporationAsset extends AssetList implements ICoreUpgrade
     use HasCompositePrimaryKey;
 
     protected $primaryKey = ['corporationID', 'itemID'];
-
-    public function upgrade(string $target)
-    {
-        // TODO: Implement upgrade() method.
-    }
 
     public function getUpgradeMapping(): array
     {

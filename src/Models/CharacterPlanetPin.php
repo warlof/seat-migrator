@@ -6,40 +6,14 @@
  * Time: 12:37
  */
 
-namespace Seat\Upgrader\Models;
+namespace Warlof\Seat\Migrator\Models;
 
 
-use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\PlanetaryPin;
-use Seat\Upgrader\Services\MappingCollection;
+use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterPlanetPin extends PlanetaryPin implements ICoreUpgrade
 {
-
-    public function upgrade(string $target)
-    {
-        $sql = "INSERT IGNORE INTO character_planet_pins (character_id, planet_id, pin_id, type_id, schematic_id, " .
-               "latitude, longitude, install_time, expiry_time, last_cycle_start, created_at, updated_at) " .
-               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        DB::connection($target)->insert($sql, [
-            $this->ownerID,
-            $this->planetID,
-            $this->pinID,
-            $this->typeID,
-            $this->schematicID,
-            $this->latitude,
-            $this->longitude,
-            $this->installTime,
-            $this->expiryTime,
-            $this->lastLaunchTime,
-            $this->created_at,
-            $this->updated_at,
-        ]);
-
-        $this->upgraded = true;
-        $this->save();
-    }
 
     public function getUpgradeMapping(): array
     {
