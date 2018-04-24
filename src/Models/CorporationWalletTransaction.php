@@ -22,6 +22,11 @@ class CorporationWalletTransaction extends WalletTransaction implements ICoreUpg
         return $value - 999;
     }
 
+    public function getTransactionTypeAttribute($value)
+    {
+        return ($value == 'buy');
+    }
+
     public function getUpgradeMapping(): array
     {
         return [

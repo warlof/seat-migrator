@@ -15,6 +15,17 @@ use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 class CharacterStanding extends Standing implements ICoreUpgrade
 {
 
+    public function getTypeAttribute($value)
+    {
+        if ($value == 'agents')
+            return 'agent';
+
+        if ($value == 'factions')
+            return 'faction';
+
+        return 'npc_corp';
+    }
+
     public function getUpgradeMapping(): array
     {
         return [

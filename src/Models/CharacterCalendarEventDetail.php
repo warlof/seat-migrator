@@ -32,6 +32,20 @@ class CharacterCalendarEventDetail extends UpcomingCalendarEvent implements ICor
         return 'character';
     }
 
+    public function getResponseAttribute($value)
+    {
+        if ($value == 'Undecided')
+            return 'not_responded';
+
+        if ($value == 'Accepted')
+            return 'accepted';
+
+        if ($value == 'Declined')
+            return 'declined';
+
+        return 'tentative';
+    }
+
     public function getUpgradeMapping(): array
     {
         return [

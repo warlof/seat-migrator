@@ -20,8 +20,7 @@ class SchemaUpgrade extends Command
 
     const TARGETED_BASE = 'target';
 
-    protected $signature = 'seat:schema:upgrade ' .
-                           '{--force : Start an upgrade and reset all flag from upgraded stuff}';
+    protected $signature = 'seat:schema:upgrade {--force}';
 
     protected $description = 'Perform an upgrade between the installed SeAT 2.0.0 to a new SeAT 3.0.0';
 
@@ -60,9 +59,20 @@ class SchemaUpgrade extends Command
         //
         $classes = include __DIR__ . '/../Config/upgrades.php';
 
-        foreach ($classes as $class => $msg) {
+        if ($this->option('force')) {
+            $this->comment('Reset flag has been detected - resetting all upgrade flag from data source');
+
+            foreach ($classes as $class)
+                $class::where('upgraded', true)->update(['upgraded' => false]);
+        }
+
+        foreach ($classes as $class) {
+            $model = new $class;
+            $targetted_tables = implode(', ', array_keys($model->getUpgradeMapping()));
+
             $count = $class::where('upgraded', false)->count();
-            $this->comment(sprintf($msg, $count));
+            $this->comment(sprintf('Proceed upgrade from %s to %s (%d)', $model->getTable(),
+                $targetted_tables, $count));
             $bar = $this->output->createProgressBar($count);
 
             while (($records = $class::where('upgraded', false)->take($this->chunk_size)->get())->count() > 0) {
@@ -80,7 +90,6 @@ class SchemaUpgrade extends Command
                     DB::raw('characterID as character_id'),
                     DB::raw('jumpCloneID as jump_clone_id'),
                     DB::raw("CONCAT('[', GROUP_CONCAT(typeID), ']') as implants"))
-                ->where('upgraded', false)
                 ->groupBy('characterID', 'jumpCloneID')
                 ->get();
 
@@ -130,7 +139,7 @@ class SchemaUpgrade extends Command
             '(default is 3306)', 3306);
         $this->db['username'] = $this->ask('What is the database username which have to be use for the migration ' .
             '(the user must be usable from the current server ? (default is seat)', 'seat');
-        $this->db['password'] = $this->output->askHidden('What is the password attached to the provided username ?');
+        $this->db['password'] = $this->secret('What is the password attached to the provided username ?');
         $this->db['database'] = $this->ask('What is the name of the database where SeAT 3.0.0 has been installed ? ' .
             '(default is seat)', 'seat-dev');
 

@@ -42,6 +42,7 @@ class CharacterPlanet extends PlanetaryColony implements ICoreUpgrade
                 'upgradeLevel'  => 'upgrade_level',
                 'numberOfPins'  => 'num_pins',
                 'lastUpdate'    => 'last_update',
+                'planetType'    => 'planet_type',
                 'created_at'    => 'created_at',
                 'updated_at'    => 'updated_at',
             ],

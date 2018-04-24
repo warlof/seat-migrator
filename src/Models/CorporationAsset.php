@@ -20,6 +20,18 @@ class CorporationAsset extends AssetList implements ICoreUpgrade
 
     protected $primaryKey = ['corporationID', 'itemID'];
 
+    public function getLocationTypeAttribute()
+    {
+        if ((60000000 <= $this->locationID && $this->locationID <= 64000000) ||
+            (68000000 <= $this->locationID && $this->locationID <= 70000000))
+            return 'station';
+
+        if (30000000 <= $this->locationID && $this->locationID <= 32000000)
+            return 'solar_system';
+
+        return 'other';
+    }
+
     public function getUpgradeMapping(): array
     {
         return [
@@ -27,6 +39,7 @@ class CorporationAsset extends AssetList implements ICoreUpgrade
                 'corporationID' => 'corporation_id',
                 'itemID'        => 'item_id',
                 'locationID'    => 'location_id',
+                'locationType'  => 'location_type',
                 'typeID'        => 'type_id',
                 'quantity'      => 'quantity',
                 'flag'          => 'location_flag',

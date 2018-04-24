@@ -10,10 +10,64 @@ namespace Warlof\Seat\Migrator\Models;
 
 
 use Seat\Eveapi\Models\Corporation\CustomsOffice;
+use Seat\Eveapi\Models\Corporation\CustomsOfficeLocation;
 use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CorporationCustomOffice extends CustomsOffice implements ICoreUpgrade
 {
+
+    public function getMapIDAttribute()
+    {
+        $location = CustomsOfficeLocation::where('itemID', $this->itemID)->first();
+        if (is_null($location))
+            return null;
+
+        return $location->mapID;
+    }
+
+    public function getXAttribute()
+    {
+        $location = CustomsOfficeLocation::where('itemID', $this->itemID)->first();
+        if (is_null($location))
+            return null;
+
+        return $location->x;
+    }
+
+    public function getYAttribute()
+    {
+        $location = CustomsOfficeLocation::where('itemID', $this->itemID)->first();
+        if (is_null($location))
+            return null;
+
+        return $location->y;
+    }
+
+    public function getZAttribute()
+    {
+        $location = CustomsOfficeLocation::where('itemID', $this->itemID)->first();
+        if (is_null($location))
+            return null;
+
+        return $location->z;
+    }
+
+    public function getStandingLevelAttribute($value)
+    {
+        if ($value == -10)
+            return 'terrible';
+
+        if ($value == -5)
+            return 'bad';
+
+        if ($value == 5)
+            return 'good';
+
+        if ($value == 10)
+            return 'excellent';
+
+        return 'neutral';
+    }
 
     public function getUpgradeMapping(): array
     {
@@ -33,6 +87,12 @@ class CorporationCustomOffice extends CustomsOffice implements ICoreUpgrade
                 'taxRateStandingNeutral'  => 'neutral_standing_tax_rate',
                 'taxRateStandingBad'      => 'bad_standing_tax_rate',
                 'taxRateStandingHorrible' => 'terrible_standing_tax_rate',
+                'mapID'                   => 'location_id',
+                'x'                       => 'x',
+                'y'                       => 'y',
+                'z'                       => 'z',
+                'created_at'              => 'created_at',
+                'updated_at'              => 'updated_at',
             ],
         ];
     }

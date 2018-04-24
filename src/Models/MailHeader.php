@@ -18,6 +18,11 @@ class MailHeader extends MailMessage implements ICoreUpgrade
 
     private static $alliance_ids = [];
 
+    public function getLabelsAttribute()
+    {
+        return '[]';
+    }
+
     public function upgrade(string $target)
     {
         if (self::$alliance_ids == [])
@@ -90,6 +95,7 @@ class MailHeader extends MailMessage implements ICoreUpgrade
                 'title'       => 'subject',
                 'senderID'    => 'from',
                 'sentDate'    => 'timestamp',
+                'labels'      => 'labels',
                 'created_at'  => 'created_at',
                 'updated_at'  => 'updated_at',
             ],

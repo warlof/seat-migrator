@@ -20,8 +20,6 @@ class MigratorServiceProvider extends ServiceProvider
     {
         $this->addCommands();
         $this->addPublications();
-
-        //$this->debug();
     }
 
     private function addCommands()
@@ -37,28 +35,4 @@ class MigratorServiceProvider extends ServiceProvider
             __DIR__ . '/Database/migrations/' => database_path('migrations'),
         ]);
     }
-
-    private function debug()
-    {
-        DB::listen(function($q){
-            $positional = 0;
-            $full_query = '';
-
-            foreach (str_split($q->sql) as $char)
-                if ($char === '?') {
-                    $value = $q->bindings[$positional];
-
-                    if (is_scalar($value))
-                        $full_query = $full_query . '"' . $value . '"';
-                    else
-                        $full_query = $full_query . '[' . gettype($value) . ']';
-
-                    $positional++;
-                } else
-                    $full_query = $full_query . $char;
-
-            logger()->debug(' ---> QUERY DEBUG:' . $full_query . ' <----');
-        });
-    }
-
 }

@@ -9,7 +9,7 @@
 namespace Warlof\Seat\Migrator\Models;
 
 
-use Seat\Eveapi\Models\Character\CharacterSheetSkills;
+use Seat\Eveapi\Models\Eve\CharacterInfo;
 use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 
 class CharacterSheet extends \Seat\Eveapi\Models\Character\CharacterSheet implements ICoreUpgrade
@@ -53,27 +53,41 @@ class CharacterSheet extends \Seat\Eveapi\Models\Character\CharacterSheet implem
         return 'structure';
     }
 
-    public function getCloneSkillPoints($value)
+    public function getCloneSkillPointsAttribute($value)
     {
-        return CharacterSheetSkills::where('characterID', $this->characterID)->sum('skillpoints');
+        $character = CharacterInfo::find($this->characterID);
+        if (is_null($character))
+            return null;
+
+        return $character->skillPoints;
+    }
+
+    public function getSecurityStatusAttribute()
+    {
+        $character = CharacterInfo::find($this->characterID);
+        if (is_null($character))
+            return null;
+
+        return $character->securityStatus;
     }
 
     public function getUpgradeMapping(): array
     {
         return [
             'character_infos'       => [
-                'characterID'   => 'character_id',
-                'name'          => 'name',
-                'corporationID' => 'corporation_id',
-                'allianceID'    => 'alliance_id',
-                'DoB'           => 'birthday',
-                'gender'        => 'gender',
-                'race'          => 'race_id',
-                'bloodLineID'   => 'bloodline_id',
-                'ancestryID'    => 'ancenstry_id',
-                'factionID'     => 'faction_id',
-                'created_at'    => 'created_at',
-                'updated_at'    => 'updated_at',
+                'characterID'    => 'character_id',
+                'name'           => 'name',
+                'corporationID'  => 'corporation_id',
+                'allianceID'     => 'alliance_id',
+                'DoB'            => 'birthday',
+                'gender'         => 'gender',
+                'race'           => 'race_id',
+                'securityStatus' => 'security_status',
+                'bloodLineID'    => 'bloodline_id',
+                'ancestryID'     => 'ancenstry_id',
+                'factionID'      => 'faction_id',
+                'created_at'     => 'created_at',
+                'updated_at'     => 'updated_at',
             ],
             'character_attributes'  => [
                 'characterID'    => 'character_id',

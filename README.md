@@ -1,11 +1,11 @@
 ![SeAT](http://i.imgur.com/aPPOxSK.png)
 # SeAT Upgrader
 
-[![Code Climate](https://codeclimate.com/github/warlof/seat-upgrader/badges/gpa.svg)](https://codeclimate.com/github/warlof/seat-upgrader)
-[![Latest Stable Version](https://poser.pugx.org/warlof/seat-upgrader/v/stable)](https://packagist.org/packages/warlof/seat-upgrader)
-[![Total Downloads](https://poser.pugx.org/warlof/seat-upgrader/downloads)](https://packagist.org/packages/warlof/seat-upgrader)
-[![Latest Unstable Version](https://poser.pugx.org/warlof/seat-upgrader/v/unstable)](https://packagist.org/packages/warlof/seat-upgrader)
-[![License](https://poser.pugx.org/warlof/seat-upgrader/license)](https://packagist.org/packages/warlof/seat-upgrader)
+[![Code Climate](https://codeclimate.com/github/warlof/seat-migrator/badges/gpa.svg)](https://codeclimate.com/github/warlof/seat-upgrader)
+[![Latest Stable Version](https://poser.pugx.org/warlof/seat-migrator/v/stable)](https://packagist.org/packages/warlof/seat-upgrader)
+[![Total Downloads](https://poser.pugx.org/warlof/seat-migrator/downloads)](https://packagist.org/packages/warlof/seat-upgrader)
+[![Latest Unstable Version](https://poser.pugx.org/warlof/seat-migrator/v/unstable)](https://packagist.org/packages/warlof/seat-upgrader)
+[![License](https://poser.pugx.org/warlof/seat-migrator/license)](https://packagist.org/packages/warlof/seat-upgrader)
 
 # Supported version
 This package is able to handle upgrade between following versions :

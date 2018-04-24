@@ -10,6 +10,7 @@ namespace Warlof\Seat\Migrator\Database\Eloquent;
 
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Warlof\Seat\Migrator\Database\Query\Grammars\CustomMySqlGrammar;
 
@@ -68,31 +69,41 @@ class MappingCollection extends Collection
         if ($this->count() < 1)
             return;
 
-        $artifact = $this->first();
+        $model = $this->first();
+        $this->getKeyFilter(DB::table($model->getTable()))->update(['upgraded' => true]);
+    }
 
-        if (is_array($artifact->getKeyName())) {
-            $ids = $this->map(function ($item, $key) use ($artifact) {
-                $hash = [];
+    /**
+     * Provide the whereFilter for on a model primary key
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    private function getKeyFilter(Builder $query)
+    {
+        // getting the first element in the collection in order to extract its model structure attributes
+        $model = $this->first();
 
-                foreach ($artifact->getKeyName() as $column)
-                    $hash[] = $item->{$column};
+        // determine if the model is using a surrogate key
+        // if not, return the filter on the primary key itself
+        if (! is_array($model->getKeyName()))
+            return $query->whereIn($model->getKeyName(), $this->pluck($model->getKeyName()));
 
-                return md5(implode('', $hash));
-            });
+        // otherwise, compute a hash for each model in the collection on all fields composing the surrogate key
+        $ids = $this->map(function ($item, $key) use ($model) {
+            $hash = [];
 
-            $binding_str = trim(str_repeat('?,', $ids->count()), ',');
+            foreach ($model->getKeyName() as $column)
+                $hash[] = $item->{$column};
 
-            DB::table($artifact->getTable())
-                ->whereRaw('MD5(CONCAT(' . implode(', ', $artifact->getKeyName()) . ')) IN (' . $binding_str . ')',
-                    $ids->toArray())
-                ->update(['upgraded' => true]);
+            return md5(implode('', $hash));
+        });
 
-            return;
-        }
+        $binding_str = trim(str_repeat('?,', $ids->count()), ',');
 
-        DB::table($artifact->getTable())
-            ->whereIn($artifact->getKeyName(), $this->pluck($artifact->getKeyName()))
-            ->update(['upgraded' => true]);
+        // returning the filter on the surrogate key
+        return $query->whereRaw('MD5(CONCAT(' . implode(', ', $model->getKeyName()) . ')) IN (' . $binding_str . ')',
+            $ids->toArray());
     }
 
 }

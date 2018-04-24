@@ -22,6 +22,7 @@ class CorporationBookmark extends Bookmark implements ICoreUpgrade
                 'folderID'      => 'folder_id',
                 'bookmarkID'    => 'bookmark_id',
                 'creatorID'     => 'creator_id',
+                'created'       => 'created',
                 'itemID'        => 'item_id',
                 'typeID'        => 'type_id',
                 'locationID'    => 'location_id',
@@ -37,8 +38,9 @@ class CorporationBookmark extends Bookmark implements ICoreUpgrade
             ],
             'corporation_bookmark_folders' => [
                 'corporationID' => 'corporation_id',
-                'folderID'     => 'folder_id',
+                'folderID'      => 'folder_id',
                 'folderName'    => 'name',
+                'creatorID'     => 'creator_id',
                 'created_at'    => 'created_at',
                 'updated_at'    => 'updated_at',
             ],

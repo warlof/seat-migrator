@@ -26,6 +26,16 @@ class CorporationIssuedMedal extends MemberMedal implements ICoreUpgrade
         return '';
     }
 
+    public function getDescriptionAttribute()
+    {
+        $medal = Medal::find($this->medalID);
+
+        if (is_null($medal))
+            return '';
+
+        return $medal->description;
+    }
+
     public function getUpgradeMapping(): array
     {
         return [
@@ -44,6 +54,7 @@ class CorporationIssuedMedal extends MemberMedal implements ICoreUpgrade
                 'characterID'   => 'character_id',
                 'medalID'       => 'medal_id',
                 'title'         => 'title',
+                'description'   => 'description',
                 'reason'        => 'reason',
                 'corporationID' => 'corporation_id',
                 'issuerID'      => 'issuer_id',

@@ -36,6 +36,8 @@ class CorporationSheet extends \Seat\Eveapi\Models\Corporation\CorporationSheet 
             'corporation_member_limits' => [
                 'corporationID' => 'corporation_id',
                 'memberLimit'   => 'limit',
+                'created_at'    => 'created_at',
+                'updated_at'    => 'updated_at',
             ],
         ];
     }

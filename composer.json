@@ -1,5 +1,5 @@
 {
-  "name": "eveseat/upgrader",
+  "name": "warlof/seat-migrator",
   "description": "This package is handling major version upgrade from SeAT project.",
   "type": "seat-plugins",
   "minimum-stability": "stable",
