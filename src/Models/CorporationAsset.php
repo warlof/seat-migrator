@@ -18,6 +18,8 @@ class CorporationAsset extends AssetList implements ICoreUpgrade
 
     use HasCompositePrimaryKey;
 
+    private static $location_flags;
+
     protected $primaryKey = ['corporationID', 'itemID'];
 
     public function getLocationTypeAttribute()
@@ -30,6 +32,14 @@ class CorporationAsset extends AssetList implements ICoreUpgrade
             return 'solar_system';
 
         return 'other';
+    }
+
+    public function getFlagAttribute($value)
+    {
+        if (is_null(self::$location_flags))
+            self::$location_flags = include __DIR__ . '/../Config/corporation_location_flags.php';
+
+        return self::$location_flags[$value];
     }
 
     public function getUpgradeMapping(): array

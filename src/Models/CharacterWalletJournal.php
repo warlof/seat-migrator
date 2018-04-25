@@ -15,7 +15,17 @@ use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 class CharacterWalletJournal extends WalletJournal implements ICoreUpgrade
 {
 
+    private static $ref_types;
+
     public $incrementing = false;
+
+    public function getRefTypeIDAttribute($value)
+    {
+        if (is_null(self::$ref_types))
+            self::$ref_types = include __DIR__ . '/../Config/reference_types.php';
+
+        return self::$ref_types[$value];
+    }
 
     public function getUpgradeMapping(): array
     {

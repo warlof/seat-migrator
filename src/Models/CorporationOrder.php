@@ -15,7 +15,7 @@ use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 class CorporationOrder extends MarketOrder implements ICoreUpgrade
 {
 
-    public function getAccountKeyID($value)
+    public function getAccountKeyAttribute($value)
     {
         return $value - 999;
     }

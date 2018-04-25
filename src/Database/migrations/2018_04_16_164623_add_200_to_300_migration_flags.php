@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Schema;
 class Add200To300MigrationFlags extends Migration
 {
 
-    private $core_tables = [];
-
     private $ignored_tables = [
         // users
         // sde
@@ -54,7 +52,7 @@ class Add200To300MigrationFlags extends Migration
 
         // looping over fetched list and remove the extra column called "upgraded" which determine if data inside a table
         // has been successfully upgraded to the new format
-        foreach ($this->core_tables as $table) {
+        foreach ($tables as $table) {
             if (in_array($table, $this->ignored_tables))
                 continue;
 
