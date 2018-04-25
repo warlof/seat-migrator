@@ -1,11 +1,11 @@
 ![SeAT](http://i.imgur.com/aPPOxSK.png)
 # SeAT Upgrader
 
-[![Code Climate](https://codeclimate.com/github/warlof/seat-migrator/badges/gpa.svg)](https://codeclimate.com/github/warlof/seat-upgrader)
-[![Latest Stable Version](https://poser.pugx.org/warlof/seat-migrator/v/stable)](https://packagist.org/packages/warlof/seat-upgrader)
-[![Total Downloads](https://poser.pugx.org/warlof/seat-migrator/downloads)](https://packagist.org/packages/warlof/seat-upgrader)
-[![Latest Unstable Version](https://poser.pugx.org/warlof/seat-migrator/v/unstable)](https://packagist.org/packages/warlof/seat-upgrader)
-[![License](https://poser.pugx.org/warlof/seat-migrator/license)](https://packagist.org/packages/warlof/seat-upgrader)
+[![Code Climate](https://codeclimate.com/github/warlof/seat-migrator/badges/gpa.svg)](https://codeclimate.com/github/warlof/seat-migrator)
+[![Latest Stable Version](https://poser.pugx.org/warlof/seat-migrator/v/stable)](https://packagist.org/packages/warlof/seat-migrator)
+[![Total Downloads](https://poser.pugx.org/warlof/seat-migrator/downloads)](https://packagist.org/packages/warlof/seat-migrator)
+[![Latest Unstable Version](https://poser.pugx.org/warlof/seat-migrator/v/unstable)](https://packagist.org/packages/warlof/seat-migrator)
+[![License](https://poser.pugx.org/warlof/seat-migrator/license)](https://packagist.org/packages/warlof/seat-migrator)
 
 # Supported version
 This package is able to handle upgrade between following versions :
@@ -28,7 +28,7 @@ This package is able to handle upgrade between following versions :
 # Usage instructions
 Version of this package are strongly tied to the SeAT version which should be migrate.
 
-There, while you're installing it, you have to specify the proper version.
+Therefore, while you're installing it, you have to specify the proper version.
 
 Upgrader version will always match with SeAT core version in order to avoid any troubles.
 
@@ -36,8 +36,8 @@ Upgrader version will always match with SeAT core version in order to avoid any 
 
 1. Connect on the server where the SeAT to be migrate is installed
 2. Move to the seat directory (usually `/var/www/seat`)
-3. Import the package with the proper version (for v2 `composer require warlof/seat-upgrader:2.0.0`)
-4. Add package into project by appending `Seat\Upgrader\UpgraderServiceProvider::class,` in `providers` array from `/config/app.php`
+3. Import the package with the proper version (for v2 `composer require warlof/seat-migrator:2.0.0`)
+4. Add package into project by appending `Warlof\Seat\Migrator\MigratorServiceProvider::class,` in `providers` array from `/config/app.php`
 5. Publish package files using `php artisan vendor:publish --force`
 6. Run migration script using `php artisan migrate` which will append a migration flag to all tables
 7. Once the package has been installed, use `php artisan seat:schema:upgrade` to run the upgrade process
