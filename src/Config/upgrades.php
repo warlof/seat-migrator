@@ -18,6 +18,8 @@ return [
     \Warlof\Seat\Migrator\Models\CharacterImplant::class,
     \Warlof\Seat\Migrator\Models\CharacterJumpClone::class,
     \Warlof\Seat\Migrator\Models\CharacterSheet::class,
+    \Warlof\Seat\Migrator\Models\CharacterAssetList::class,
+    \Warlof\Seat\Migrator\Models\CharacterAssetListContent::class,
     \Warlof\Seat\Migrator\Models\CharacterShip::class,
     \Warlof\Seat\Migrator\Models\CharacterSkill::class,
     \Warlof\Seat\Migrator\Models\CharacterCorporationHistory::class,
@@ -46,7 +48,8 @@ return [
     \Warlof\Seat\Migrator\Models\CharacterWalletTransaction::class,
     // Corporation
     \Warlof\Seat\Migrator\Models\CorporationWalletBalance::class,
-    \Warlof\Seat\Migrator\Models\CorporationAsset::class,
+    \Warlof\Seat\Migrator\Models\CorporationAssetList::class,
+    \Warlof\Seat\Migrator\Models\CorporationAssetListContent::class,
     \Warlof\Seat\Migrator\Models\CorporationBookmark::class,
     \Warlof\Seat\Migrator\Models\CorporationContact::class,
     \Warlof\Seat\Migrator\Models\CorporationContract::class,

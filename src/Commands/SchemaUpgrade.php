@@ -20,7 +20,7 @@ class SchemaUpgrade extends Command
 
     const TARGETED_BASE = 'target';
 
-    protected $signature = 'seat:schema:upgrade {--force}';
+    protected $signature = 'seat:migrator:upgrade {--force}';
 
     protected $description = 'Perform an upgrade between the installed SeAT 2.0.0 to a new SeAT 3.0.0';
 
@@ -47,7 +47,7 @@ class SchemaUpgrade extends Command
     public function handle()
     {
         $this->promptSetup();
-        //$this->backups();
+        $this->backups();
 
         //
         // proceed to upgrade
@@ -68,11 +68,11 @@ class SchemaUpgrade extends Command
 
         foreach ($classes as $class) {
             $model = new $class;
-            $targetted_tables = implode(', ', array_keys($model->getUpgradeMapping()));
+            $targeted_tables = implode(', ', array_keys($model->getUpgradeMapping()));
 
             $count = $class::where('upgraded', false)->count();
             $this->comment(sprintf('Proceed upgrade from %s to %s (%d)', $model->getTable(),
-                $targetted_tables, $count));
+                $targeted_tables, $count));
             $bar = $this->output->createProgressBar($count);
 
             while (($records = $class::where('upgraded', false)->take($this->chunk_size)->get())->count() > 0) {
@@ -95,10 +95,11 @@ class SchemaUpgrade extends Command
 
         $this->comment(sprintf('Proceed upgrade from character_character_sheet_jump_clone_implants to character_jump_clones (%s)',
             $records->count()));
+        $bar = $this->output->createProgressBar($records->count());
 
-        $records->chunk($this->chunk_size)->each(function($chunk) {
+        $records->chunk($this->chunk_size)->each(function($chunk) use ($bar) {
 
-            $chunk->each(function($record){
+            $chunk->each(function($record) use ($bar) {
 
                 DB::connection(self::TARGETED_BASE)
                     ->insert("UPDATE character_jump_clones SET implants = ? WHERE character_id = ? AND jump_clone_id = ?", [
@@ -107,10 +108,14 @@ class SchemaUpgrade extends Command
                         $record->jump_clone_id,
                     ]);
 
+                $bar->advance(1);
+
             });
         });
 
         CharacterSheetJumpCloneImplants::where('upgraded', false)->update(['upgraded' => true]);
+        $bar->finish();
+        $this->line('');
 
         $this->info('The process has successfully ended. Your new SeAT 3.0.0 is now ready for update and usage.');
 

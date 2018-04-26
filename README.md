@@ -7,6 +7,15 @@
 [![Latest Unstable Version](https://poser.pugx.org/warlof/seat-migrator/v/unstable)](https://packagist.org/packages/warlof/seat-migrator)
 [![License](https://poser.pugx.org/warlof/seat-migrator/license)](https://packagist.org/packages/warlof/seat-migrator)
 
+# TODO
+Here is a quick todo list of pending migrated table :
+ - character_roles
+ - corporation_member_titles
+ - corporation_roles
+ - corporation_roles_histories
+ - corporation_title_roles
+ - mail_recipients
+
 # Supported version
 This package is able to handle upgrade between following versions :
  - 2.0.0 to 3.0.0
@@ -28,15 +37,13 @@ This package is able to handle upgrade between following versions :
 # Usage instructions
 Version of this package are strongly tied to the SeAT version which should be migrate.
 
-Therefore, while you're installing it, you have to specify the proper version.
-
-Upgrader version will always match with SeAT core version in order to avoid any troubles.
+Upgrader version will always match with SeAT core origin version in order to avoid any troubles.
 
 ## Process
 
 1. Connect on the server where the SeAT to be migrate is installed
 2. Move to the seat directory (usually `/var/www/seat`)
-3. Import the package with the proper version (for v2 `composer require warlof/seat-migrator:2.0.0`)
+3. Import the package with the proper version (for v2 `composer require warlof/seat-migrator`)
 4. Add package into project by appending `Warlof\Seat\Migrator\MigratorServiceProvider::class,` in `providers` array from `/config/app.php`
 5. Publish package files using `php artisan vendor:publish --force`
 6. Run migration script using `php artisan migrate` which will append a migration flag to all tables

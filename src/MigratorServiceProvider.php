@@ -12,6 +12,7 @@ namespace Warlof\Seat\Migrator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Warlof\Seat\Migrator\Commands\SchemaUpgrade;
+use Warlof\Seat\Migrator\Commands\Version;
 
 class MigratorServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,7 @@ class MigratorServiceProvider extends ServiceProvider
     {
         $this->commands([
             SchemaUpgrade::class,
+            Version::class,
         ]);
     }
 

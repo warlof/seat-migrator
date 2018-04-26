@@ -42,6 +42,7 @@ return [
     87 => 'DroneBay',
     89 => 'Implant',
     90 => 'ShipHangar',
+    91 => 'ShipOffline',
     92 => 'RigSlot0',
     93 => 'RigSlot1',
     94 => 'RigSlot2',

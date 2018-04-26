@@ -2,25 +2,25 @@
 /**
  * Created by PhpStorm.
  * User: Warlof Tutsimo
- * Date: 22/04/2018
- * Time: 14:24
+ * Date: 26/04/2018
+ * Time: 21:01
  */
 
 namespace Warlof\Seat\Migrator\Models;
 
 
-use Seat\Eveapi\Models\Corporation\AssetList;
+use Seat\Eveapi\Models\Corporation\AssetListContents;
 use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 use Warlof\Seat\Migrator\Traits\HasCompositePrimaryKey;
 
-class CorporationAsset extends AssetList implements ICoreUpgrade
+class CorporationAssetListContent extends AssetListContents implements ICoreUpgrade
 {
 
     use HasCompositePrimaryKey;
 
-    private static $location_flags;
-
     protected $primaryKey = ['corporationID', 'itemID'];
+
+    private static $location_flag;
 
     public function getLocationTypeAttribute()
     {
@@ -36,10 +36,10 @@ class CorporationAsset extends AssetList implements ICoreUpgrade
 
     public function getFlagAttribute($value)
     {
-        if (is_null(self::$location_flags))
-            self::$location_flags = include __DIR__ . '/../Config/corporation_location_flags.php';
+        if (is_null(self::$location_flag))
+            self::$location_flag = include __DIR__ . '/../Config/corporation_location_flags.php';
 
-        return self::$location_flags[$value];
+        return self::$location_flag[$value];
     }
 
     public function getUpgradeMapping(): array
@@ -48,10 +48,10 @@ class CorporationAsset extends AssetList implements ICoreUpgrade
             'corporation_assets' => [
                 'corporationID' => 'corporation_id',
                 'itemID'        => 'item_id',
-                'locationID'    => 'location_id',
-                'locationType'  => 'location_type',
                 'typeID'        => 'type_id',
                 'quantity'      => 'quantity',
+                'locationID'    => 'location_id',
+                'locationType'  => 'location_type',
                 'flag'          => 'location_flag',
                 'singleton'     => 'is_singleton',
                 'created_at'    => 'created_at',
