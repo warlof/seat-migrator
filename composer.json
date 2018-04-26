@@ -16,7 +16,6 @@
     }
   },
   "require": {
-    "eveseat/seat":"2.0.0",
     "eveseat/eveapi":"2.0.14",
     "eveseat/notifications":"2.0.11",
     "eveseat/web":"2.0.19",
