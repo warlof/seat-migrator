@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterSheetJumpCloneImplants;
 use Spatie\DbDumper\Databases\MySql;
 
-class SchemaUpgrade extends Command
+class Upgrade extends Command
 {
 
     const TARGETED_BASE = 'target';

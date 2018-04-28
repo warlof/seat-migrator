@@ -47,7 +47,7 @@ Upgrader version will always match with SeAT core origin version in order to avo
 4. Add package into project by appending `Warlof\Seat\Migrator\MigratorServiceProvider::class,` in `providers` array from `/config/app.php`
 5. Publish package files using `php artisan vendor:publish --force`
 6. Run migration script using `php artisan migrate` which will append a migration flag to all tables
-7. Once the package has been installed, use `php artisan seat:schema:upgrade` to run the upgrade process
+7. Once the package has been installed, use `php artisan seat:migrator:upgrade` to run the upgrade process
 8. Follow the prompt and take a cup of tea (if you have a large database, plan for a few of them) :)
 
 ## Requirement
