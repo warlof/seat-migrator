@@ -13,6 +13,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Seat\Eveapi\Models\Character\CharacterSheetJumpCloneImplants;
+use Seat\Eveapi\Models\Character\MailMessage;
 use Spatie\DbDumper\Databases\MySql;
 
 class Upgrade extends Command
@@ -114,6 +115,70 @@ class Upgrade extends Command
         });
 
         CharacterSheetJumpCloneImplants::where('upgraded', false)->update(['upgraded' => true]);
+        $bar->finish();
+        $this->line('');
+
+        // Mail recipients
+        $allianceIDs = include __DIR__ . '/../Config/alliances.php';
+
+        $sql = "INSERT IGNORE INTO mail_recipients (mail_id, recipient_id, recipient_type, created_at, updated_at) " .
+               "VALUES (?, ?, ?, ?, ?)";
+
+        $mails = MailMessage::select('messageID', 'toCorpOrAllianceID', 'toCharacterIDs', 'toListID', 'created_at', 'updated_at')
+            ->distinct();
+
+        $this->comment(sprintf('Proceed upgrade from character_mail_messages to mail_recipients (%s)',
+            $records->count()));
+        $bar = $this->output->createProgressBar($mails->count());
+
+        $mails->each(function($record) use ($allianceIDs, $bar, $sql) {
+            if (! is_null($record->toCorpOrAllianceID) && $record->toCorpOrAllianceID > 0) {
+                $type = 'corporation';
+
+                if ($record->toCorpOrAllianceID >= 99000000 && $record->toCorpOrAllianceID <= 100000000)
+                    $type = 'alliance';
+
+                if (in_array($record->toCorpOrAllianceID, $allianceIDs))
+                    $type = 'alliance';
+
+                DB::connection(self::TARGETED_BASE)
+                    ->insert($sql, [
+                        $record->messageID,
+                        $record->toCorpOrAllianceID,
+                        $type,
+                        $record->created_at,
+                        $record->updated_at,
+                    ]);
+            }
+
+            if (! is_null($record->toListID) && $record->toListID > 0)
+                DB::connection(self::TARGETED_BASE)
+                    ->insert($sql, [
+                        $record->messageID,
+                        $record->toListID,
+                        'mailing_list',
+                        $record->created_at,
+                        $record->updated_at,
+                    ]);
+
+            if (! is_null($record->toCharacterIDs) && ! empty($record->toCharacterIDs)) {
+                $characters = explode(',', $record->toCharacterIDs);
+
+                foreach ($characters as $character_id)
+                    DB::connection(self::TARGETED_BASE)
+                        ->insert($sql, [
+                            $record->messageID,
+                            $character_id,
+                            'character',
+                            $record->created_at,
+                            $record->updated_at,
+                        ]);
+
+            }
+
+            $bar->advance();
+        });
+
         $bar->finish();
         $this->line('');
 

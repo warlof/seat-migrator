@@ -7,15 +7,6 @@
 [![Latest Unstable Version](https://poser.pugx.org/warlof/seat-migrator/v/unstable)](https://packagist.org/packages/warlof/seat-migrator)
 [![License](https://poser.pugx.org/warlof/seat-migrator/license)](https://packagist.org/packages/warlof/seat-migrator)
 
-# TODO
-Here is a quick todo list of pending migrated table :
- - character_roles
- - corporation_member_titles
- - corporation_roles
- - corporation_roles_histories
- - corporation_title_roles
- - mail_recipients
-
 # Supported version
 This package is able to handle upgrade between following versions :
  - 2.0.0 to 3.0.0
@@ -37,7 +28,14 @@ This package is able to handle upgrade between following versions :
 # Usage instructions
 Version of this package are strongly tied to the SeAT version which should be migrate.
 
-Upgrader version will always match with SeAT core origin version in order to avoid any troubles.
+This package version will always match with SeAT core origin version in order to avoid any troubles.
+
+## Requirement
+In order to use this package, you need a working installation from both source and target SeAT version.
+
+Both Installation may be on different server, it's handled by the script.
+
+Database from both installation must be reachable from the server where the package is installed (source).
 
 ## Process
 
@@ -49,10 +47,3 @@ Upgrader version will always match with SeAT core origin version in order to avo
 6. Run migration script using `php artisan migrate` which will append a migration flag to all tables
 7. Once the package has been installed, use `php artisan seat:migrator:upgrade` to run the upgrade process
 8. Follow the prompt and take a cup of tea (if you have a large database, plan for a few of them) :)
-
-## Requirement
-In order to use this package, you need a working installation from both source and target SeAT version.
-
-Both Installation may be on different server, it's handled by the script.
-
-Database from both installation must be reachable from the server where the package is installed (source).
