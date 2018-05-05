@@ -2,8 +2,6 @@
   "name": "warlof/seat-migrator",
   "description": "This package is handling major version upgrade from SeAT project.",
   "type": "seat-plugins",
-  "minimum-stability": "alpha",
-  "prefer-stable": true,
   "license": "GPL-3.0-or-later",
   "authors": [
     {
