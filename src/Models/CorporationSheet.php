@@ -14,6 +14,11 @@ use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 class CorporationSheet extends \Seat\Eveapi\Models\Corporation\CorporationSheet implements ICoreUpgrade
 {
 
+    public function getTaxRateAttribute($value)
+    {
+        return $value / 100;
+    }
+
     public function getUpgradeMapping(): array
     {
         return [

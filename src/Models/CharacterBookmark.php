@@ -37,6 +37,8 @@ class CharacterBookmark extends Bookmark implements ICoreUpgrade
                 'x'           => 'x',
                 'y'           => 'y',
                 'z'           => 'z',
+                'mapID'       => 'map_id',
+                'mapName'     => 'map_name',
                 'created_at'  => 'created_at',
                 'updated_at'  => 'updated_at',
             ],
