@@ -182,6 +182,9 @@ class Upgrade extends Command
         $bar->finish();
         $this->line('');
 
+        // pruning deprecated mercenary division
+        DB::connection(self::TARGETED_BASE)->delete('DELETE FROM corporation_divisions WHERE division = ?', [9001]);
+
         $this->info('The process has successfully ended. Your new SeAT 3.0.0 is now ready for update and usage.');
 
     }
