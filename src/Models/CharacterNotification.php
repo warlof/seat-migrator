@@ -16,20 +16,30 @@ use Warlof\Seat\Migrator\Database\Eloquent\MappingCollection;
 class CharacterNotification extends Notifications implements ICoreUpgrade
 {
 
+    private static $notification_types;
+
+    public function getTypeIDAttribute($value)
+    {
+        if (is_null(self::$notification_types))
+            self::$notification_types = include __DIR__ . '/../Config/notification_types.php';
+
+        return self::$notification_types[$value];
+    }
+
     public function getSenderTypeAttribute()
     {
-        if ((3000000 >= $this->senderID && $this->senderID <= 4000000) ||
-            (90000000 >= $this->senderID && $this->senderID <= 98000000))
+        if ((3000000 <= $this->senderID && $this->senderID <= 4000000) ||
+            (90000000 <= $this->senderID && $this->senderID <= 98000000))
             return 'character';
 
-        if ((1000000 >= $this->senderID && $this->senderID <= 2000000) ||
-            (98000000 >= $this->senderID && $this->senderID <= 99000000))
+        if ((1000000 <= $this->senderID && $this->senderID <= 2000000) ||
+            (98000000 <= $this->senderID && $this->senderID <= 99000000))
             return 'corporation';
 
-        if (99000000 >= $this->senderID && $this->senderID <= 100000000)
+        if (99000000 <= $this->senderID && $this->senderID <= 100000000)
             return 'alliance';
 
-        if (500000 >= $this->senderID && $this->senderID <= 1000000)
+        if (500000 <= $this->senderID && $this->senderID <= 1000000)
             return 'faction';
 
         return 'other';

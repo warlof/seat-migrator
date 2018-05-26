@@ -46,8 +46,8 @@ class CharacterSheet extends \Seat\Eveapi\Models\Character\CharacterSheet implem
 
     public function getHomeLocationTypeAttribute()
     {
-        if ((60000000 >= $this->homeStationID && $this->homeStationID <= 64000000) ||
-            (68000000 >= $this->homeStationID && $this->homeStationID <= 70000000))
+        if ((60000000 <= $this->homeStationID && $this->homeStationID <= 64000000) ||
+            (68000000 <= $this->homeStationID && $this->homeStationID <= 70000000))
             return 'station';
 
         return 'structure';
